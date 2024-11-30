@@ -1,0 +1,94 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  hashedPassword String
+  name           String?
+  avatarUrl      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  products  Product[]
+  invoices  Invoice[]
+  estimates Estimate[]
+
+    // Auth related fields
+  sessions       Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  invoiceItems InvoiceItem[]
+  estimateItems EstimateItem[]
+}
+
+model Invoice {
+  id          String    @id @default(cuid())
+  number      String    @unique
+  clientName  String
+  clientEmail String
+  dueDate     DateTime
+  status      String
+  total       Float
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  items       InvoiceItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model InvoiceItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+}
+
+model Estimate {
+  id          String    @id @default(cuid())
+  number      String    @unique
+  clientName  String
+  clientEmail String
+  expiryDate  DateTime
+  status      String
+  total       Float
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  items       EstimateItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model EstimateItem {
+  id         String   @id @default(cuid())
+  quantity   Int
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  estimateId String
+  estimate   Estimate @relation(fields: [estimateId], references: [id])
+}
+
