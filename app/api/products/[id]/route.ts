@@ -1,3 +1,4 @@
+// app/api/products/[id]/route.ts
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
@@ -5,8 +6,9 @@ import { validateRequest } from "@/lib/auth";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -14,7 +16,7 @@ export async function GET(
 
   try {
     const product = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     if (!product || product.userId !== user.id) {
@@ -32,8 +34,9 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -42,7 +45,7 @@ export async function PUT(
   try {
     const { name, description, price } = await request.json();
     const updatedProduct = await prisma.product.update({
-      where: { id: params.id, userId: user.id },
+      where: { id: id, userId: user.id },
       data: {
         name,
         description,
@@ -60,8 +63,9 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -69,7 +73,7 @@ export async function DELETE(
 
   try {
     await prisma.product.deleteMany({
-      where: { id: params.id, userId: user.id },
+      where: { id: id, userId: user.id },
     });
     return NextResponse.json({ message: "Product deleted successfully" });
   } catch (error) {

@@ -23,6 +23,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 const schema = z
   .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
@@ -41,6 +42,7 @@ export default function RegisterPage() {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -51,6 +53,7 @@ export default function RegisterPage() {
     try {
       setLoading(true);
       const formData = new FormData();
+      formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("password", values.password);
       formData.append("confirmPassword", values.confirmPassword);
@@ -82,6 +85,23 @@ export default function RegisterPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="text"
+                        placeholder="Enter your name"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"

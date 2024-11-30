@@ -9,6 +9,7 @@ import { hash } from "@node-rs/argon2";
 
 const registerSchema = z
   .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
@@ -20,6 +21,7 @@ const registerSchema = z
 
 export async function register(formData: FormData) {
   const result = registerSchema.safeParse({
+    name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
@@ -29,7 +31,7 @@ export async function register(formData: FormData) {
     return { error: result.error.issues[0].message };
   }
 
-  const { email, password } = result.data;
+  const { name, email, password } = result.data;
 
   try {
     const existingUser = await prisma.user.findUnique({
@@ -43,6 +45,7 @@ export async function register(formData: FormData) {
     const hashedPassword = await hash(password);
     const user = await prisma.user.create({
       data: {
+        name,
         email,
         hashedPassword,
       },

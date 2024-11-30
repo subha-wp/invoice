@@ -6,8 +6,9 @@ import { validateRequest } from "@/lib/auth";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,8 +16,8 @@ export async function GET(
 
   try {
     const estimate = await prisma.estimate.findUnique({
-      where: { id: params.id },
-      include: { items: { include: { product: true } } },
+      where: { id: id },
+      include: { items: { include: { product: true } }, business: true },
     });
 
     if (!estimate || estimate.userId !== user.id) {
@@ -37,8 +38,9 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -48,7 +50,7 @@ export async function PUT(
     const { clientName, clientEmail, expiryDate, status, items } =
       await request.json();
     const updatedEstimate = await prisma.estimate.update({
-      where: { id: params.id, userId: user.id },
+      where: { id: id, userId: user.id },
       data: {
         clientName,
         clientEmail,
@@ -86,8 +88,9 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -95,7 +98,7 @@ export async function DELETE(
 
   try {
     await prisma.estimate.deleteMany({
-      where: { id: params.id, userId: user.id },
+      where: { id: id, userId: user.id },
     });
     return NextResponse.json({ message: "Estimate deleted successfully" });
   } catch (error) {

@@ -18,6 +18,8 @@ export const lucia = new Lucia(adapter, {
     return {
       id: attributes.id,
       email: attributes.email,
+      name: attributes.name,
+      avatarUrl: attributes.avatarUrl,
     };
   },
 });
@@ -33,6 +35,8 @@ interface DatabaseUserAttributes {
   id: string;
   email: string;
   hashedPassword: string;
+  name: string;
+  avatarUrl: string;
 }
 
 export const google = new Google(
