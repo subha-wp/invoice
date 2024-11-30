@@ -1,27 +1,18 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Home, FileText, Package, Menu } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Home, FileText, Package } from "lucide-react";
 
 const links = [
-  { href: '/', label: 'Dashboard', icon: Home },
-  { href: '/invoices', label: 'Invoices', icon: FileText },
-  { href: '/estimates', label: 'Estimates', icon: FileText },
-  { href: '/products', label: 'Products', icon: Package },
-]
+  { href: "/dashboard", label: "Dashboard", icon: Home },
+  { href: "/dashboard/invoices", label: "Invoices", icon: FileText },
+  { href: "/dashboard/estimates", label: "Estimates", icon: FileText },
+  { href: "/dashboard/products", label: "Products", icon: Package },
+];
 
 export function MobileNav() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-gray-200">
@@ -31,7 +22,7 @@ export function MobileNav() {
             key={link.href}
             href={link.href}
             className={`inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 ${
-              pathname === link.href ? 'text-primary' : 'text-gray-500'
+              pathname === link.href ? "text-primary" : "text-gray-500"
             }`}
           >
             <link.icon className="w-5 h-5" />
@@ -40,6 +31,5 @@ export function MobileNav() {
         ))}
       </div>
     </div>
-  )
+  );
 }
-

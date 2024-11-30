@@ -17,13 +17,13 @@ export default function Home() {
             </CardHeader>
             <CardContent className="grid gap-4">
               <Button asChild>
-                <Link href="/invoices/create">Create Invoice</Link>
+                <Link href="/dashboard/invoices/create">Create Invoice</Link>
               </Button>
               <Button asChild>
-                <Link href="/estimates/create">Create Estimate</Link>
+                <Link href="/dashboard/estimates/create">Create Estimate</Link>
               </Button>
               <Button asChild>
-                <Link href="/products/create">Add Product</Link>
+                <Link href="/dashboard/products/create">Add Product</Link>
               </Button>
             </CardContent>
           </Card>
