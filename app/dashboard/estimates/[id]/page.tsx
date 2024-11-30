@@ -5,16 +5,16 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { InvoicePDF } from "@/components/invoice-pdf";
 
 import { getEstimate } from "@/lib/services/api";
 import { Estimate } from "@/types";
 import { toast } from "sonner";
 import { ArrowLeft, Download } from "lucide-react";
 import Link from "next/link";
+import { CopyToClipboardButton } from "@/components/copy-to-clipboard-button";
 
 export default function EstimateDetail() {
   const { id } = useParams();
@@ -65,17 +65,9 @@ export default function EstimateDetail() {
       <Card className="mb-4">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl">Estimate #{estimate.number}</CardTitle>
-          <PDFDownloadLink
-            document={<InvoicePDF invoice={estimate} />}
-            fileName={`estimate-${estimate.number}.pdf`}
-          >
-            {({ loading }) => (
-              <Button size="sm" disabled={loading}>
-                <Download className="w-4 h-4 mr-2" />
-                {loading ? "Generating..." : "Download PDF"}
-              </Button>
-            )}
-          </PDFDownloadLink>
+          <CopyToClipboardButton
+            text={`${window.location.origin}/view/estimates/${id}`}
+          />
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

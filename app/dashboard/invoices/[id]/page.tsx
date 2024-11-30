@@ -4,16 +4,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { InvoicePDF } from "@/components/invoice-pdf";
 
 import { getInvoice } from "@/lib/services/api";
 import { Invoice } from "@/types";
 import { toast } from "sonner";
 import { ArrowLeft, Download } from "lucide-react";
 import Link from "next/link";
+import { CopyToClipboardButton } from "@/components/copy-to-clipboard-button";
 
 export default function InvoiceDetail() {
   const { id } = useParams();
@@ -64,17 +63,9 @@ export default function InvoiceDetail() {
       <Card className="mb-4">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl">Invoice #{invoice.number}</CardTitle>
-          <PDFDownloadLink
-            document={<InvoicePDF invoice={invoice} />}
-            fileName={`invoice-${invoice.number}.pdf`}
-          >
-            {({ loading }) => (
-              <Button size="sm" disabled={loading}>
-                <Download className="w-4 h-4 mr-2" />
-                {loading ? "Generating..." : "Download PDF"}
-              </Button>
-            )}
-          </PDFDownloadLink>
+          <CopyToClipboardButton
+            text={`${window.location.origin}/view/invoices/${id}`}
+          />
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
