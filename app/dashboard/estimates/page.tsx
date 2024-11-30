@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense } from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
@@ -10,10 +11,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getEstimates } from "@/lib/api";
+import { validateRequest } from "@/lib/auth";
 
 async function EstimatesList() {
-  const estimates = await getEstimates();
+  const { user } = await validateRequest();
+  if (!user) {
+    return <div>Please log in to view estimates.</div>;
+  }
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/estimates`
+  );
+
+  if (!response.ok) {
+    return <div>Failed to load estimates. Please try again later.</div>;
+  }
+
+  const estimates = await response.json();
 
   return (
     <Table>
@@ -28,7 +42,7 @@ async function EstimatesList() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {estimates.map((estimate) => (
+        {estimates.map((estimate: any) => (
           <TableRow key={estimate.id}>
             <TableCell>{estimate.number}</TableCell>
             <TableCell>{estimate.clientName}</TableCell>
@@ -39,7 +53,7 @@ async function EstimatesList() {
             <TableCell>${estimate.total.toFixed(2)}</TableCell>
             <TableCell>
               <Button asChild size="sm">
-                <Link href={`/estimates/${estimate.id}`}>View</Link>
+                <Link href={`/dashboard/estimates/${estimate.id}`}>View</Link>
               </Button>
             </TableCell>
           </TableRow>
@@ -54,7 +68,7 @@ export default function EstimatesPage() {
     <div className="container mx-auto px-4 pb-20">
       <h1 className="text-2xl font-bold my-4">Estimates</h1>
       <Button asChild className="mb-4">
-        <Link href="/estimates/create">Create New Estimate</Link>
+        <Link href="/dashboard/estimates/create">Create New Estimate</Link>
       </Button>
       <div className="overflow-x-auto">
         <Suspense fallback={<div>Loading estimates...</div>}>

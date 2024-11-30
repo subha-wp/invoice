@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense } from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
@@ -10,11 +11,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { getProducts } from "@/lib/api";
+import { validateRequest } from "@/lib/auth";
 
 async function ProductsList() {
-  const products = await getProducts();
+  const { user } = await validateRequest();
+  if (!user) {
+    return <div>Please log in to view products.</div>;
+  }
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`
+  );
+
+  if (!response.ok) {
+    return <div>Failed to load products. Please try again later.</div>;
+  }
+
+  const products = await response.json();
 
   return (
     <Table>
@@ -27,14 +40,14 @@ async function ProductsList() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products.map((product) => (
+        {products.map((product: any) => (
           <TableRow key={product.id}>
             <TableCell>{product.name}</TableCell>
             <TableCell>{product.description}</TableCell>
             <TableCell>${product.price.toFixed(2)}</TableCell>
             <TableCell>
               <Button asChild size="sm">
-                <Link href={`/products/${product.id}`}>Edit</Link>
+                <Link href={`/dashboard/products/${product.id}`}>Edit</Link>
               </Button>
             </TableCell>
           </TableRow>
@@ -49,7 +62,7 @@ export default function ProductsPage() {
     <div className="container mx-auto px-4 pb-20">
       <h1 className="text-2xl font-bold my-4">Products</h1>
       <Button asChild className="mb-4">
-        <Link href="/products/create">Add New Product</Link>
+        <Link href="/dashboard/products/create">Add New Product</Link>
       </Button>
       <div className="overflow-x-auto">
         <Suspense fallback={<div>Loading products...</div>}>

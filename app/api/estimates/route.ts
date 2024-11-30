@@ -6,19 +6,22 @@ import { validateRequest } from "@/lib/auth";
 
 export async function GET(request: Request) {
   const { user } = await validateRequest();
+
+  console.log("user", user);
+
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const invoices = await prisma.invoice.findMany({
+    const estimates = await prisma.estimate.findMany({
       where: { userId: user.id },
       include: { items: { include: { product: true } } },
     });
-    return NextResponse.json(invoices);
+    return NextResponse.json(estimates);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch invoices" },
+      { error: "Failed to fetch estimates" },
       { status: 500 }
     );
   }
@@ -31,13 +34,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { clientName, clientEmail, dueDate, items } = await request.json();
-    const invoice = await prisma.invoice.create({
+    const { clientName, clientEmail, expiryDate, items } = await request.json();
+    const estimate = await prisma.estimate.create({
       data: {
-        number: `INV-${Date.now()}`,
+        number: `EST-${Date.now()}`,
         clientName,
         clientEmail,
-        dueDate: new Date(dueDate),
+        expiryDate: new Date(expiryDate),
         status: "PENDING",
         total: 0, // Calculate total based on items
         userId: user.id,
@@ -52,19 +55,19 @@ export async function POST(request: Request) {
     });
 
     // Calculate and update total
-    const total = invoice.items.reduce(
+    const total = estimate.items.reduce(
       (sum, item) => sum + item.quantity * item.product.price,
       0
     );
-    await prisma.invoice.update({
-      where: { id: invoice.id },
+    await prisma.estimate.update({
+      where: { id: estimate.id },
       data: { total },
     });
 
-    return NextResponse.json(invoice);
+    return NextResponse.json(estimate);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to create invoice" },
+      { error: "Failed to create estimate" },
       { status: 500 }
     );
   }

@@ -14,19 +14,22 @@ export async function GET(
   }
 
   try {
-    const invoice = await prisma.invoice.findUnique({
+    const estimate = await prisma.estimate.findUnique({
       where: { id: params.id },
       include: { items: { include: { product: true } } },
     });
 
-    if (!invoice || invoice.userId !== user.id) {
-      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+    if (!estimate || estimate.userId !== user.id) {
+      return NextResponse.json(
+        { error: "Estimate not found" },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(invoice);
+    return NextResponse.json(estimate);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch invoice" },
+      { error: "Failed to fetch estimate" },
       { status: 500 }
     );
   }
@@ -42,14 +45,14 @@ export async function PUT(
   }
 
   try {
-    const { clientName, clientEmail, dueDate, status, items } =
+    const { clientName, clientEmail, expiryDate, status, items } =
       await request.json();
-    const updatedInvoice = await prisma.invoice.update({
+    const updatedEstimate = await prisma.estimate.update({
       where: { id: params.id, userId: user.id },
       data: {
         clientName,
         clientEmail,
-        dueDate: new Date(dueDate),
+        expiryDate: new Date(expiryDate),
         status,
         items: {
           deleteMany: {},
@@ -63,19 +66,19 @@ export async function PUT(
     });
 
     // Recalculate total
-    const total = updatedInvoice.items.reduce(
+    const total = updatedEstimate.items.reduce(
       (sum, item) => sum + item.quantity * item.product.price,
       0
     );
-    await prisma.invoice.update({
-      where: { id: updatedInvoice.id },
+    await prisma.estimate.update({
+      where: { id: updatedEstimate.id },
       data: { total },
     });
 
-    return NextResponse.json(updatedInvoice);
+    return NextResponse.json(updatedEstimate);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to update invoice" },
+      { error: "Failed to update estimate" },
       { status: 500 }
     );
   }
@@ -91,13 +94,13 @@ export async function DELETE(
   }
 
   try {
-    await prisma.invoice.deleteMany({
+    await prisma.estimate.deleteMany({
       where: { id: params.id, userId: user.id },
     });
-    return NextResponse.json({ message: "Invoice deleted successfully" });
+    return NextResponse.json({ message: "Estimate deleted successfully" });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to delete invoice" },
+      { error: "Failed to delete estimate" },
       { status: 500 }
     );
   }

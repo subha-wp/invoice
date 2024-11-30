@@ -1,3 +1,4 @@
+// app/dashboard/products/create/page.tsx
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -35,7 +36,7 @@ export default function CreateProduct() {
         }),
       });
       if (!response.ok) throw new Error("Failed to create product");
-      router.push("/products");
+      router.push("/dashboard/products");
     } catch (err) {
       setError("Failed to create product. Please try again.");
     } finally {

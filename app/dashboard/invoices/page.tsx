@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense } from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
@@ -10,10 +11,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getInvoices } from "@/lib/api";
+import { validateRequest } from "@/lib/auth";
 
 async function InvoicesList() {
-  const invoices = await getInvoices();
+  const { user } = await validateRequest();
+  if (!user) {
+    return <div>Please log in to view invoices.</div>;
+  }
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invoices`,
+    {
+      headers: {
+        Cookie: `auth_session=${user.id}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return <div>Failed to load invoices. Please try again later.</div>;
+  }
+
+  const invoices = await response.json();
 
   return (
     <Table>
@@ -28,7 +47,7 @@ async function InvoicesList() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
+        {invoices.map((invoice: any) => (
           <TableRow key={invoice.id}>
             <TableCell>{invoice.number}</TableCell>
             <TableCell>{invoice.clientName}</TableCell>
@@ -39,7 +58,7 @@ async function InvoicesList() {
             <TableCell>${invoice.total.toFixed(2)}</TableCell>
             <TableCell>
               <Button asChild size="sm">
-                <Link href={`/invoices/${invoice.id}`}>View</Link>
+                <Link href={`/dashboard/invoices/${invoice.id}`}>View</Link>
               </Button>
             </TableCell>
           </TableRow>
@@ -54,7 +73,7 @@ export default function InvoicesPage() {
     <div className="container mx-auto px-4 pb-20">
       <h1 className="text-2xl font-bold my-4">Invoices</h1>
       <Button asChild className="mb-4">
-        <Link href="/invoices/create">Create New Invoice</Link>
+        <Link href="/dashboard/invoices/create">Create New Invoice</Link>
       </Button>
       <div className="overflow-x-auto">
         <Suspense fallback={<div>Loading invoices...</div>}>
