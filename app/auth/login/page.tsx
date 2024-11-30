@@ -65,7 +65,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            Login to MediBook
+            Login to nextInvoice
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -113,7 +113,7 @@ export default function LoginPage() {
           <div className="mt-4 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
-              href="/auth/register?role=patient"
+              href="/auth/register"
               className="text-primary hover:underline"
             >
               Register

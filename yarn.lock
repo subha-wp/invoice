@@ -14,10 +14,25 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@emnapi/runtime@^1.2.0":
+"@emnapi/core@^1.1.0":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@emnapi/core/-/core-1.3.1.tgz#9c62d185372d1bddc94682b87f376e03dfac3f16"
+  integrity sha512-pVGjBIt1Y6gg3EJN8jTcfpP/+uuRksIo055oE/OBkDNcjZqVbfkWCksG1Jp4yZnj3iKWyWX8fdG/j6UDYPbFog==
+  dependencies:
+    "@emnapi/wasi-threads" "1.0.1"
+    tslib "^2.4.0"
+
+"@emnapi/runtime@^1.1.0", "@emnapi/runtime@^1.2.0":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@emnapi/runtime/-/runtime-1.3.1.tgz#0fcaa575afc31f455fd33534c19381cfce6c6f60"
   integrity sha512-kEBmG8KyqtxJZv+ygbEim+KCGtIq1fC22Ms3S4ziXmYKm8uyoLX0MHONVKwp+9opg390VaKRNt4a7A9NwmpNhw==
+  dependencies:
+    tslib "^2.4.0"
+
+"@emnapi/wasi-threads@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@emnapi/wasi-threads/-/wasi-threads-1.0.1.tgz#d7ae71fd2166b1c916c6cd2d0df2ef565a2e1a5b"
+  integrity sha512-iIBu7mwkq4UQGeMEM8bLwNK962nXdhodeScX4slfQnRhEMMzvYivHhutCIk8uojvmASXXPC2WNEjwxFWk72Oqw==
   dependencies:
     tslib "^2.4.0"
 
@@ -79,6 +94,11 @@
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.8.tgz#21a907684723bbbaa5f0974cf7730bd797eb8e62"
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
+
+"@hookform/resolvers@^3.9.1":
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.1.tgz#a23883c40bfd449cb6c6ab5a0fa0729184c950ff"
+  integrity sha512-ud2HqmGBM0P0IABqoskKWI6PEf6ZDDBZkFqe2Vnl+mTHCEHzr3ISjjZyCwTjC/qpL25JC9aIDkloQejvMeq0ug==
 
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
@@ -261,6 +281,15 @@
   resolved "https://registry.yarnpkg.com/@lucia-auth/adapter-prisma/-/adapter-prisma-4.0.1.tgz#8f8aa95bf0ac266fd2fb8ac3dc6dd9faec53342f"
   integrity sha512-3SztRhj1RAHbbhI/0aB7YC5zl6Z6aktPhkWpn2CHhiB03B9x/+A+M6pqJuAt1usU8PzkjVilgRPhrPymMar66A==
 
+"@napi-rs/wasm-runtime@^0.2.3":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.5.tgz#b6f5079408305fe6a3529ccb2bb8ba8d9b7a02e7"
+  integrity sha512-kwUxR7J9WLutBbulqg1dfOrMTwhMdXLdcGUhcbCcGwnPLt3gz19uHVdwH1syKVDbE022ZS2vZxOWflFLS0YTjw==
+  dependencies:
+    "@emnapi/core" "^1.1.0"
+    "@emnapi/runtime" "^1.1.0"
+    "@tybys/wasm-util" "^0.9.0"
+
 "@next/env@15.0.3":
   version "15.0.3"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-15.0.3.tgz#a2e9bf274743c52b74d30f415f3eba750d51313a"
@@ -312,6 +341,98 @@
   version "15.0.3"
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-15.0.3.tgz#940a6f7b370cdde0cc67eabe945d9e6d97e0be9f"
   integrity sha512-VNAz+HN4OGgvZs6MOoVfnn41kBzT+M+tB+OK4cww6DNyWS6wKaDpaAm/qLeOUbnMh0oVx1+mg0uoYARF69dJyA==
+
+"@node-rs/argon2-android-arm-eabi@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-android-arm-eabi/-/argon2-android-arm-eabi-2.0.0.tgz#7897cf58a87c3b7cbaf8a5a56b3e3d5e3f59da52"
+  integrity sha512-PbnBBiHg/boaj9EyQ1+Y53OQrvxJh1knrPZmzr6wRTR+DyCSHnwHpBANVhXV/T4Z9MJywy1SHFeCpuUMxN6HTw==
+
+"@node-rs/argon2-android-arm64@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-android-arm64/-/argon2-android-arm64-2.0.0.tgz#fb87380adedcd741d42c57a989a04e06b5800780"
+  integrity sha512-o3L+m7E2TnVRFRCAlJm3TF8ZR+WyMykakCSopOYaAcAtjwlhOOiaQsV+iw2WS3ju3AuvJ/0Qu7A4ecdHAWQ4aA==
+
+"@node-rs/argon2-darwin-arm64@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-darwin-arm64/-/argon2-darwin-arm64-2.0.0.tgz#f5d661469fd265a472a1d2f7da25431e8c6f87f4"
+  integrity sha512-ad5qpXGxDwIS4/kH18LNe0G4m/4tm0z7gI4DmlTU4r3/LnrbMBW7XTHHNjUGpmtgAEn+4g/WQj1fIGtJZNFerw==
+
+"@node-rs/argon2-darwin-x64@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-darwin-x64/-/argon2-darwin-x64-2.0.0.tgz#4c8c816d15caa31d6749bf9145976fefc1a664a4"
+  integrity sha512-DhWHTjO3XNf8g9CflXZHeHbPFsRxvgsqC52S15Adj0lKSrWFzxvE9+z27jAP5KE/GmfDa4Ln5Dc4qQIQEblZAA==
+
+"@node-rs/argon2-freebsd-x64@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-freebsd-x64/-/argon2-freebsd-x64-2.0.0.tgz#4350f77d48cd9188be7399d465e6e3d4b9c75053"
+  integrity sha512-FdLOudD9D9aL/0XB4QJl5OY48+XfZZbrPrVhcpbHgskZmo/ISWTn2z/TEyjraE7Zy9D/4X8d3/WMJiXueoyZPw==
+
+"@node-rs/argon2-linux-arm-gnueabihf@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-arm-gnueabihf/-/argon2-linux-arm-gnueabihf-2.0.0.tgz#c519fcf0b12921c2e422aec0fa13ca5b83ae9e64"
+  integrity sha512-Qtp0bsVv+/dnZsLl1O7CWVqp1ijb3r2YMvQnkK3z06pH6fajMH9LWQCGdZslnidNfRudwxj51Xiym+nD8POuYw==
+
+"@node-rs/argon2-linux-arm64-gnu@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-arm64-gnu/-/argon2-linux-arm64-gnu-2.0.0.tgz#5f1b33095f745a12a01c31e3040034d52e9b87c5"
+  integrity sha512-1maxs5vFcn3q6jgWuG92oT7uZxcPEHTCu3IIOEVaQCJzVSAfyL7h6o0hWaHj7Ga3/5rhiaDgSwX1MTW7Crl2QQ==
+
+"@node-rs/argon2-linux-arm64-musl@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-arm64-musl/-/argon2-linux-arm64-musl-2.0.0.tgz#17a66fbbc6f25a6983d071d9d4f4273741cb9320"
+  integrity sha512-Wju44r1YDhQXDWxGNkfft0iHvoXcmxJ5NJSoqSMpNuHiGOkqW2heWtBlaXZk71F8rfFLZ8hES+t1uouXYV1mNw==
+
+"@node-rs/argon2-linux-x64-gnu@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-x64-gnu/-/argon2-linux-x64-gnu-2.0.0.tgz#935233604ead4c7f6844e62ed81b67974af6f205"
+  integrity sha512-udCXRjNR9RU03n4NeUcrsgsVVDzWatI5RvRPererR8mCiljDzNB89hZokXtEVtVTHDey+0WVa5lL13wJdkQOAQ==
+
+"@node-rs/argon2-linux-x64-musl@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-linux-x64-musl/-/argon2-linux-x64-musl-2.0.0.tgz#6bc7195bc4c3aceceda4d6a4de74bdf7edbf8a28"
+  integrity sha512-RZGpd82OzYkGg4ZCLgCqwZ68m5qizPUBCDRwTquaUi4JV1Wly4iJnMlQuXsvgwvX8AKbCWKRB2HfXfOxnYRCOA==
+
+"@node-rs/argon2-wasm32-wasi@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-wasm32-wasi/-/argon2-wasm32-wasi-2.0.0.tgz#f85929b5a9cf81ffe2003c3a07fcc416ccc10ac6"
+  integrity sha512-WUbkAsxV2ZbwfVKJ/YgSLngn1H2IJ6uO4FYw+KPkDDYbpUHPImg0ny6k2gV340qUXYP6QvHg7EorUbXrLCE8Rg==
+  dependencies:
+    "@napi-rs/wasm-runtime" "^0.2.3"
+
+"@node-rs/argon2-win32-arm64-msvc@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-win32-arm64-msvc/-/argon2-win32-arm64-msvc-2.0.0.tgz#8b54c7abc58744b7cd8dc3e354d0d2d600e66a25"
+  integrity sha512-yEvArafekU2Roo3DweBReQrRIvD+VQDiLyKhY6uIi/J27iKdWUcpqK2KTyYRak2z32LwqGS+f/4OlOGIHrbFgA==
+
+"@node-rs/argon2-win32-ia32-msvc@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-win32-ia32-msvc/-/argon2-win32-ia32-msvc-2.0.0.tgz#9ec0342db4724fbad1e77c0310c1a4bad116f882"
+  integrity sha512-JUxcS00LmJ1xJgb1Wc5hg/neuqHmFJXdMEejdul45Mdi5GVuv4lsy3ywXkggjlDfETDkvlgnKgoaHG0mcIdtdg==
+
+"@node-rs/argon2-win32-x64-msvc@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2-win32-x64-msvc/-/argon2-win32-x64-msvc-2.0.0.tgz#4cfc10d6db59c4f02e0ed2597766b3f135b47d7b"
+  integrity sha512-Wp+CuqwX97y8v+TXRU7FDCeXpWDqqoEZzBTD5RTY/ncgoyhyYsToHGztoKrlK9Nc4Q5Pco9OaJsgL5piHzvzcQ==
+
+"@node-rs/argon2@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@node-rs/argon2/-/argon2-2.0.0.tgz#b5e4cb7f5e3d5c2e1a46eced4712b41c37f0a024"
+  integrity sha512-19DVNk87JRT0f5R9CucMM06cQg6PAoRBEfvmKXdrD0uFAWUmaf58IXTyCLdVLJW0IXwfV7I0FCldTiOilh1rZA==
+  optionalDependencies:
+    "@node-rs/argon2-android-arm-eabi" "2.0.0"
+    "@node-rs/argon2-android-arm64" "2.0.0"
+    "@node-rs/argon2-darwin-arm64" "2.0.0"
+    "@node-rs/argon2-darwin-x64" "2.0.0"
+    "@node-rs/argon2-freebsd-x64" "2.0.0"
+    "@node-rs/argon2-linux-arm-gnueabihf" "2.0.0"
+    "@node-rs/argon2-linux-arm64-gnu" "2.0.0"
+    "@node-rs/argon2-linux-arm64-musl" "2.0.0"
+    "@node-rs/argon2-linux-x64-gnu" "2.0.0"
+    "@node-rs/argon2-linux-x64-musl" "2.0.0"
+    "@node-rs/argon2-wasm32-wasi" "2.0.0"
+    "@node-rs/argon2-win32-arm64-msvc" "2.0.0"
+    "@node-rs/argon2-win32-ia32-msvc" "2.0.0"
+    "@node-rs/argon2-win32-x64-msvc" "2.0.0"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -823,6 +944,13 @@
   integrity sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==
   dependencies:
     tslib "^2.8.0"
+
+"@tybys/wasm-util@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@tybys/wasm-util/-/wasm-util-0.9.0.tgz#3e75eb00604c8d6db470bf18c37b7d984a0e3355"
+  integrity sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==
+  dependencies:
+    tslib "^2.4.0"
 
 "@types/json5@^0.0.29":
   version "0.0.29"
@@ -2607,6 +2735,11 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+next-themes@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/next-themes/-/next-themes-0.4.3.tgz#ea54552d5986936d177eed393ea50b658ae44800"
+  integrity sha512-nG84VPkTdUHR2YeD89YchvV4I9RbiMAql3GiLEQlPvq1ioaqPaIReK+yMRdg/zgiXws620qS1rU30TiWmmG9lA==
+
 next@15.0.3:
   version "15.0.3"
   resolved "https://registry.yarnpkg.com/next/-/next-15.0.3.tgz#804f5b772e7570ef1f088542a59860914d3288e9"
@@ -2932,6 +3065,11 @@ react-dom@^18:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
 
+react-hook-form@^7.53.2:
+  version "7.53.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.53.2.tgz#6fa37ae27330af81089baadd7f322cc987b8e2ac"
+  integrity sha512-YVel6fW5sOeedd1524pltpHX+jgU2u3DSDtXEaBORNdqiNrsX/nUI/iGXONegttg0mJVnfrIkiV0cmTU6Oo2xw==
+
 react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -3201,6 +3339,11 @@ simple-swizzle@^0.2.2:
   integrity sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==
   dependencies:
     is-arrayish "^0.3.1"
+
+sonner@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/sonner/-/sonner-1.7.0.tgz#f59a2a70e049a179b6fbd1bb1bf2619d5ced07c0"
+  integrity sha512-W6dH7m5MujEPyug3lpI2l3TC3Pp1+LTgK0Efg+IHDrBbtEjyCmCHHo6yfNBOsf1tFZ6zf+jceWwB38baC8yO9g==
 
 source-map-js@^1.0.2, source-map-js@^1.2.1:
   version "1.2.1"
@@ -3705,3 +3848,8 @@ yoga-layout@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/yoga-layout/-/yoga-layout-3.1.0.tgz#04d00d7c2160635640dc79b48e7e4fc6a2fba2b2"
   integrity sha512-auzJ8lEovThZIpR8wLGWNo/JEj4VTO79q9/gOJ0dWb3shAYPFdX3t9VN0fC0v+jeQF77STUdCzebLwRMqzn5gQ==
+
+zod@^3.23.8:
+  version "3.23.8"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.8.tgz#e37b957b5d52079769fb8097099b592f0ef4067d"
+  integrity sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==

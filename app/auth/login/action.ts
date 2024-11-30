@@ -1,10 +1,11 @@
 "use server";
 
 import { z } from "zod";
-import { lucia } from "../../auth";
+
 import prisma from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { verify } from "@node-rs/argon2";
+import { lucia } from "@/lib/auth";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
