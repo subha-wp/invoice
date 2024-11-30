@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MobileNav } from "@/components/mobile-nav";
+
 import { Product } from "@/types";
 import { useBusiness } from "@/lib/hooks/useBusiness";
 import { toast } from "sonner";
@@ -151,7 +151,6 @@ export default function CreateInvoice() {
           {isLoading ? "Creating..." : "Create Invoice"}
         </Button>
       </form>
-      <MobileNav />
     </div>
   );
 }

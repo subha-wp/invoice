@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MobileNav } from "@/components/mobile-nav";
+
 import { getEstimate } from "@/lib/services/api";
 import { Estimate } from "@/types";
 import { toast } from "sonner";
@@ -117,7 +117,6 @@ export default function EstimateDetail() {
           )}
         </CardContent>
       </Card>
-      <MobileNav />
     </div>
   );
 }

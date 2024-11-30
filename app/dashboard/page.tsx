@@ -2,7 +2,7 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MobileNav } from "@/components/mobile-nav";
+
 import Link from "next/link";
 
 export default function Home() {
@@ -44,7 +44,6 @@ export default function Home() {
             </CardContent>
           </Card>
         </div>
-        <MobileNav />
       </div>
     </div>
   );

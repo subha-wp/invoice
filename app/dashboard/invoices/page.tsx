@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
+
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -48,7 +48,7 @@ export default function InvoicesPage() {
                   {new Date(invoice.dueDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>{invoice.status}</TableCell>
-                <TableCell>${invoice.total.toFixed(2)}</TableCell>
+                <TableCell>₹{invoice.total.toFixed(2)}</TableCell>
                 <TableCell>
                   <Button asChild size="sm">
                     <Link href={`/dashboard/invoices/${invoice.id}`}>View</Link>
@@ -59,7 +59,6 @@ export default function InvoicesPage() {
           </TableBody>
         </Table>
       </div>
-      <MobileNav />
     </div>
   );
 }

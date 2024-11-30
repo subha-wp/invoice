@@ -2,7 +2,6 @@
 "use client";
 
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -48,7 +47,7 @@ export default function EstimatesPage() {
                   {new Date(estimate.expiryDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>{estimate.status}</TableCell>
-                <TableCell>${estimate.total.toFixed(2)}</TableCell>
+                <TableCell>₹{estimate.total.toFixed(2)}</TableCell>
                 <TableCell>
                   <Button asChild size="sm">
                     <Link href={`/dashboard/estimates/${estimate.id}`}>
@@ -61,7 +60,6 @@ export default function EstimatesPage() {
           </TableBody>
         </Table>
       </div>
-      <MobileNav />
     </div>
   );
 }

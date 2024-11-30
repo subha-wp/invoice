@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/alt-text */
+import React from "react";
 import {
   Document,
   Page,
@@ -9,6 +9,7 @@ import {
   Font,
 } from "@react-pdf/renderer";
 import { Invoice } from "@/types";
+import { IndianRupee } from "lucide-react";
 
 Font.register({
   family: "Roboto",
@@ -42,9 +43,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 10,
     borderBottom: "1 solid #e0e0e0",
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   leftHeader: {
     flexDirection: "column",
@@ -54,8 +55,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     objectFit: "contain",
   },
   title: {
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   clientInfo: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   table: {
     display: "table",
@@ -120,10 +121,23 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: "#1a237e",
   },
+  paymentDetails: {
+    fontSize: 10,
+    marginBottom: 3,
+    borderBottom: "1 solid #e0e0e0",
+  },
   paymentInfo: {
     marginTop: 30,
     borderTop: "1 solid #e0e0e0",
     paddingTop: 10,
+  },
+  bankDetails: {
+    marginTop: 10,
+    border: "1 solid #e0e0e0",
+    padding: 10,
+    borderRadius: 4,
+    alignSelf: "flex-start",
+    maxWidth: "60%",
   },
   signature: {
     marginTop: 50,
@@ -200,30 +214,38 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  ₹{(item.quantity * item.product.price).toFixed(2)}
+                  {(item.quantity * item.product.price).toFixed(2)}
                 </Text>
               </View>
             </View>
           ))}
         </View>
 
-        <Text style={styles.total}>Total: ₹{invoice.total.toFixed(2)}</Text>
+        <Text style={styles.total}>
+          Total:
+          <IndianRupee />
+          {invoice.total.toFixed(2)}
+        </Text>
 
         {invoice.business.bankName && (
           <View style={styles.paymentInfo}>
-            <Text style={styles.subtitle}>Payment Details</Text>
-            <Text style={styles.text}>
-              Bank Name: {invoice.business.bankName}
-            </Text>
-            <Text style={styles.text}>
-              Account No: {invoice.business.accountNo}
-            </Text>
-            <Text style={styles.text}>
-              IFSC Code: {invoice.business.ifscCode}
-            </Text>
-            {invoice.business.upiId && (
-              <Text style={styles.text}>UPI ID: {invoice.business.upiId}</Text>
-            )}
+            <View style={styles.bankDetails}>
+              <Text style={styles.paymentDetails}>Payment Details</Text>
+              <Text style={styles.text}>
+                Bank Name: {invoice.business.bankName}
+              </Text>
+              <Text style={styles.text}>
+                Account No: {invoice.business.accountNo}
+              </Text>
+              <Text style={styles.text}>
+                IFSC Code: {invoice.business.ifscCode}
+              </Text>
+              {invoice.business.upiId && (
+                <Text style={styles.text}>
+                  UPI ID: {invoice.business.upiId}
+                </Text>
+              )}
+            </View>
           </View>
         )}
 

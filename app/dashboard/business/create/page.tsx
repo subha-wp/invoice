@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MobileNav } from "@/components/mobile-nav";
+
 import { createBusiness } from "@/lib/services/api";
 import { toast } from "sonner";
 
@@ -148,7 +148,6 @@ export default function CreateBusiness() {
           {isLoading ? "Creating..." : "Create Business"}
         </Button>
       </form>
-      <MobileNav />
     </div>
   );
 }

@@ -30,6 +30,7 @@ export interface Product {
 }
 
 export interface Invoice {
+  [x: string]: string;
   id: string;
   number: string;
   clientName: string;

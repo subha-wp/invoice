@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MobileNav } from "@/components/mobile-nav";
+
 import { updateBusiness } from "@/lib/services/api";
 import { useBusinessDetails } from "@/lib/hooks/useBusinessDetails";
 import { toast } from "sonner";
@@ -181,7 +181,6 @@ export default function EditBusiness() {
           </Button>
         </div>
       </form>
-      <MobileNav />
     </div>
   );
 }

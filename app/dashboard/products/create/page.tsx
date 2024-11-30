@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MobileNav } from "@/components/mobile-nav";
 
 export default function CreateProduct() {
   const [name, setName] = useState("");
@@ -81,7 +80,6 @@ export default function CreateProduct() {
           {isLoading ? "Adding..." : "Add Product"}
         </Button>
       </form>
-      <MobileNav />
     </div>
   );
 }

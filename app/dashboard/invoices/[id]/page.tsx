@@ -8,7 +8,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { InvoicePDF } from "@/components/invoice-pdf";
-import { MobileNav } from "@/components/mobile-nav";
+
 import { getInvoice } from "@/lib/services/api";
 import { Invoice } from "@/types";
 import { toast } from "sonner";
@@ -151,7 +151,6 @@ export default function InvoiceDetail() {
           )}
         </CardContent>
       </Card>
-      <MobileNav />
     </div>
   );
 }
