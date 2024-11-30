@@ -30,7 +30,6 @@ export interface Product {
 }
 
 export interface Invoice {
-  [x: string]: string;
   id: string;
   number: string;
   clientName: string;
@@ -40,8 +39,8 @@ export interface Invoice {
   total: number;
   userId: string;
   businessId: string;
-  business: Business;
-  items: InvoiceItem[];
+  business?: Business;
+  items?: InvoiceItem[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,8 +63,8 @@ export interface Estimate {
   total: number;
   userId: string;
   businessId: string;
-  business: Business;
-  items: EstimateItem[];
+  business?: Business;
+  items?: EstimateItem[];
   createdAt: Date;
   updatedAt: Date;
 }
