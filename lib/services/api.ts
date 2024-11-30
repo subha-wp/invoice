@@ -1,6 +1,44 @@
-import { Estimate, Invoice, Product } from "@/types";
+import { Business, Estimate, Invoice, Product } from "@/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+// Business Services
+export async function getBusinesses(): Promise<Business[]> {
+  const response = await fetch(`${BASE_URL}/api/business`);
+  if (!response.ok) throw new Error("Failed to fetch businesses");
+  return response.json();
+}
+
+export async function getBusiness(id: string): Promise<Business> {
+  const response = await fetch(`${BASE_URL}/api/business/${id}`);
+  if (!response.ok) throw new Error("Failed to fetch business");
+  return response.json();
+}
+
+export async function createBusiness(
+  data: Omit<Business, "id" | "userId" | "createdAt" | "updatedAt">
+): Promise<Business> {
+  const response = await fetch(`${BASE_URL}/api/business`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Failed to create business");
+  return response.json();
+}
+
+export async function updateBusiness(
+  id: string,
+  data: Partial<Business>
+): Promise<Business> {
+  const response = await fetch(`${BASE_URL}/api/business/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Failed to update business");
+  return response.json();
+}
 
 // Product Services
 export async function getProducts(): Promise<Product[]> {

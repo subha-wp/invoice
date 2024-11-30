@@ -10,6 +10,7 @@ export default function Home() {
     <div>
       <div className="container mx-auto px-4 pb-20">
         <h1 className="text-2xl font-bold my-4">Dashboard</h1>
+
         <div className="grid gap-4">
           <Card>
             <CardHeader>
@@ -24,6 +25,12 @@ export default function Home() {
               </Button>
               <Button asChild>
                 <Link href="/dashboard/products/create">Add Product</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/dashboard/business/create">Add Business</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/dashboard/business">Business</Link>
               </Button>
             </CardContent>
           </Card>

@@ -1,6 +1,4 @@
-// app/dashboard/invoices/create/page.tsx
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -16,17 +14,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Product } from "@/types";
+import { Product, Business } from "@/types";
+import { useBusiness } from "@/lib/hooks/useBusiness";
+import { toast } from "sonner";
 
 export default function CreateInvoice() {
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [businessId, setBusinessId] = useState("");
   const [items, setItems] = useState([{ productId: "", quantity: 1 }]);
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { businesses, loading: loadingBusinesses } = useBusiness();
 
   useEffect(() => {
     async function fetchProducts() {
@@ -44,6 +46,11 @@ export default function CreateInvoice() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!businessId) {
+      toast.error("Please select a business");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
@@ -57,11 +64,11 @@ export default function CreateInvoice() {
           clientEmail,
           dueDate,
           items,
-          userId: "user-id", // Replace with actual user ID from authentication
+          businessId,
         }),
       });
       if (!response.ok) throw new Error("Failed to create invoice");
-      router.push("/invoices");
+      router.push("/dashboard/invoices");
     } catch (err) {
       setError("Failed to create invoice. Please try again.");
     } finally {
@@ -79,11 +86,33 @@ export default function CreateInvoice() {
     setItems(newItems);
   };
 
+  if (loadingBusinesses) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="container mx-auto px-4 pb-20">
       <h1 className="text-2xl font-bold my-4">Create New Invoice</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="business">Select Business</Label>
+          <Select
+            value={businessId}
+            onValueChange={(value) => setBusinessId(value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select business" />
+            </SelectTrigger>
+            <SelectContent>
+              {businesses.map((business) => (
+                <SelectItem key={business.id} value={business.id}>
+                  {business.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <div>
           <Label htmlFor="clientName">Client Name</Label>
           <Input
@@ -119,9 +148,7 @@ export default function CreateInvoice() {
             <div key={index} className="flex gap-2 mt-2">
               <Select
                 value={item.productId}
-                onValueChange={(value: string | number) =>
-                  updateItem(index, "productId", value)
-                }
+                onValueChange={(value) => updateItem(index, "productId", value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select product" />

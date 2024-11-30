@@ -16,12 +16,13 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  products  Product[]
-  invoices  Invoice[]
-  estimates Estimate[]
+  products   Product[]
+  invoices   Invoice[]
+  estimates  Estimate[]
+  businesses Business[]
 
-    // Auth related fields
-  sessions       Session[]
+  // Auth related fields
+  sessions Session[]
 }
 
 model Session {
@@ -31,6 +32,26 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model Business {
+  id          String   @id @default(cuid())
+  name        String
+  address     String?
+  phone       String?
+  email       String?
+  website     String?
+  logoUrl     String?
+  bankName    String?
+  ifscCode    String?
+  accountNo   String?
+  upiId       String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  invoices    Invoice[]
+  estimates   Estimate[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Product {
@@ -53,7 +74,9 @@ model Invoice {
   status      String
   total       Float
   userId      String
+  businessId  String
   user        User      @relation(fields: [userId], references: [id])
+  business    Business  @relation(fields: [businessId], references: [id])
   items       InvoiceItem[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -77,7 +100,9 @@ model Estimate {
   status      String
   total       Float
   userId      String
+  businessId  String
   user        User      @relation(fields: [userId], references: [id])
+  business    Business  @relation(fields: [businessId], references: [id])
   items       EstimateItem[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -91,4 +116,3 @@ model EstimateItem {
   estimateId String
   estimate   Estimate @relation(fields: [estimateId], references: [id])
 }
-

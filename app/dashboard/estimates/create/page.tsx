@@ -1,8 +1,7 @@
-// app/dashboard/estimates/create/page.tsx
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,19 +15,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Product } from "@/types";
-import { useSession } from "../../SessionProvider";
+import { useBusiness } from "@/lib/hooks/useBusiness";
+import { toast } from "sonner";
 
 export default function CreateEstimate() {
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+  const [businessId, setBusinessId] = useState("");
   const [items, setItems] = useState([{ productId: "", quantity: 1 }]);
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
-  const { user } = useSession();
+  const { businesses, loading: loadingBusinesses } = useBusiness();
 
   useEffect(() => {
     async function fetchProducts() {
@@ -46,6 +46,11 @@ export default function CreateEstimate() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!businessId) {
+      toast.error("Please select a business");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
@@ -59,11 +64,11 @@ export default function CreateEstimate() {
           clientEmail,
           expiryDate,
           items,
-          userId: { user },
+          businessId,
         }),
       });
       if (!response.ok) throw new Error("Failed to create estimate");
-      router.push("/estimates");
+      router.push("/dashboard/estimates");
     } catch (err) {
       setError("Failed to create estimate. Please try again.");
     } finally {
@@ -81,11 +86,33 @@ export default function CreateEstimate() {
     setItems(newItems);
   };
 
+  if (loadingBusinesses) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="container mx-auto px-4 pb-20">
       <h1 className="text-2xl font-bold my-4">Create New Estimate</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="business">Select Business</Label>
+          <Select
+            value={businessId}
+            onValueChange={(value) => setBusinessId(value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select business" />
+            </SelectTrigger>
+            <SelectContent>
+              {businesses.map((business) => (
+                <SelectItem key={business.id} value={business.id}>
+                  {business.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <div>
           <Label htmlFor="clientName">Client Name</Label>
           <Input
@@ -129,7 +156,7 @@ export default function CreateEstimate() {
                 <SelectContent>
                   {products.map((product) => (
                     <SelectItem key={product.id} value={product.id}>
-                      {product.name} - ${product.price.toFixed(2)}
+                      {product.name} - ₹{product.price.toFixed(2)}
                     </SelectItem>
                   ))}
                 </SelectContent>

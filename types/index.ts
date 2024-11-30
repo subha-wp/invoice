@@ -4,6 +4,23 @@ export interface User {
   name: string | null;
 }
 
+export interface Business {
+  id: string;
+  name: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  logoUrl?: string;
+  bankName?: string;
+  ifscCode?: string;
+  accountNo?: string;
+  upiId?: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -21,6 +38,8 @@ export interface Invoice {
   status: string;
   total: number;
   userId: string;
+  businessId: string;
+  business: Business;
   items: InvoiceItem[];
   createdAt: Date;
   updatedAt: Date;
@@ -43,6 +62,8 @@ export interface Estimate {
   status: string;
   total: number;
   userId: string;
+  businessId: string;
+  business: Business;
   items: EstimateItem[];
   createdAt: Date;
   updatedAt: Date;
