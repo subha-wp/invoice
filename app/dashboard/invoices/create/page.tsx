@@ -129,7 +129,7 @@ export default function CreateInvoice() {
                 <SelectContent>
                   {products.map((product) => (
                     <SelectItem key={product.id} value={product.id}>
-                      {product.name} - ${product.price.toFixed(2)}
+                      {product.name} - ₹{product.price.toFixed(2)}
                     </SelectItem>
                   ))}
                 </SelectContent>

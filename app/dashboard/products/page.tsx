@@ -42,7 +42,7 @@ export default function ProductsPage() {
               <TableRow key={product.id}>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.description}</TableCell>
-                <TableCell>${product.price.toFixed(2)}</TableCell>
+                <TableCell>₹{product.price.toFixed(2)}</TableCell>
                 <TableCell>
                   <Button asChild size="sm">
                     <Link href={`/dashboard/products/${product.id}`}>Edit</Link>
