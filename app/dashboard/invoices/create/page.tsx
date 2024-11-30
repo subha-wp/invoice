@@ -7,16 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MobileNav } from "@/components/mobile-nav";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Product, Business } from "@/types";
+import { Product } from "@/types";
 import { useBusiness } from "@/lib/hooks/useBusiness";
 import { toast } from "sonner";
+import { ItemList } from "@/components/forms/ItemList";
+import { BusinessSelect } from "@/components/forms/BusinessSelect";
 
 export default function CreateInvoice() {
   const [clientName, setClientName] = useState("");
@@ -51,6 +46,11 @@ export default function CreateInvoice() {
       return;
     }
 
+    if (items.some((item) => !item.productId)) {
+      toast.error("Please select products for all items");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
@@ -68,9 +68,10 @@ export default function CreateInvoice() {
         }),
       });
       if (!response.ok) throw new Error("Failed to create invoice");
+      toast.success("Invoice created successfully");
       router.push("/dashboard/invoices");
     } catch (err) {
-      setError("Failed to create invoice. Please try again.");
+      toast.error("Failed to create invoice. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -78,6 +79,10 @@ export default function CreateInvoice() {
 
   const addItem = () => {
     setItems([...items, { productId: "", quantity: 1 }]);
+  };
+
+  const removeItem = (index: number) => {
+    setItems(items.filter((_, i) => i !== index));
   };
 
   const updateItem = (index: number, field: string, value: string | number) => {
@@ -97,21 +102,11 @@ export default function CreateInvoice() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label htmlFor="business">Select Business</Label>
-          <Select
+          <BusinessSelect
+            businesses={businesses}
             value={businessId}
-            onValueChange={(value) => setBusinessId(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select business" />
-            </SelectTrigger>
-            <SelectContent>
-              {businesses.map((business) => (
-                <SelectItem key={business.id} value={business.id}>
-                  {business.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            onChange={setBusinessId}
+          />
         </div>
         <div>
           <Label htmlFor="clientName">Client Name</Label>
@@ -144,37 +139,13 @@ export default function CreateInvoice() {
         </div>
         <div>
           <Label>Items</Label>
-          {items.map((item, index) => (
-            <div key={index} className="flex gap-2 mt-2">
-              <Select
-                value={item.productId}
-                onValueChange={(value) => updateItem(index, "productId", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select product" />
-                </SelectTrigger>
-                <SelectContent>
-                  {products.map((product) => (
-                    <SelectItem key={product.id} value={product.id}>
-                      {product.name} - ₹{product.price.toFixed(2)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                value={item.quantity}
-                onChange={(e) =>
-                  updateItem(index, "quantity", parseInt(e.target.value))
-                }
-                min="1"
-                required
-              />
-            </div>
-          ))}
-          <Button type="button" onClick={addItem} className="mt-2">
-            Add Item
-          </Button>
+          <ItemList
+            items={items}
+            products={products}
+            onAddItem={addItem}
+            onRemoveItem={removeItem}
+            onUpdateItem={updateItem}
+          />
         </div>
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Creating..." : "Create Invoice"}

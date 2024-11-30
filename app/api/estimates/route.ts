@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+//@ts-nocheck
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 import { validateRequest } from "@/lib/auth";
+import { createEstimate } from "@/lib/services/estimate.service";
+import prisma from "@/lib/prisma";
 
 export async function GET(request: Request) {
   const { user } = await validateRequest();
-
-  console.log("user", user);
-
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -16,7 +15,10 @@ export async function GET(request: Request) {
   try {
     const estimates = await prisma.estimate.findMany({
       where: { userId: user.id },
-      include: { items: { include: { product: true } } },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
     return NextResponse.json(estimates);
   } catch (error) {
@@ -34,38 +36,21 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { clientName, clientEmail, expiryDate, items } = await request.json();
-    const estimate = await prisma.estimate.create({
-      data: {
-        number: `EST-${Date.now()}`,
-        clientName,
-        clientEmail,
-        expiryDate: new Date(expiryDate),
-        status: "PENDING",
-        total: 0, // Calculate total based on items
-        userId: user.id,
-        items: {
-          create: items.map((item: any) => ({
-            quantity: item.quantity,
-            product: { connect: { id: item.productId } },
-          })),
-        },
-      },
-      include: { items: { include: { product: true } } },
-    });
+    const { clientName, clientEmail, expiryDate, items, businessId } =
+      await request.json();
 
-    // Calculate and update total
-    const total = estimate.items.reduce(
-      (sum, item) => sum + item.quantity * item.product.price,
-      0
-    );
-    await prisma.estimate.update({
-      where: { id: estimate.id },
-      data: { total },
+    const estimate = await createEstimate({
+      clientName,
+      clientEmail,
+      expiryDate,
+      items,
+      businessId,
+      user,
     });
 
     return NextResponse.json(estimate);
   } catch (error) {
+    console.error("Create estimate error:", error);
     return NextResponse.json(
       { error: "Failed to create estimate" },
       { status: 500 }

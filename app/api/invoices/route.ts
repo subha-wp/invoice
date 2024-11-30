@@ -1,8 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+//@ts-nocheck
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 import { validateRequest } from "@/lib/auth";
+import { createInvoice } from "@/lib/services/invoice.service";
+import prisma from "@/lib/prisma";
 
 export async function GET(request: Request) {
   const { user } = await validateRequest();
@@ -13,7 +15,10 @@ export async function GET(request: Request) {
   try {
     const invoices = await prisma.invoice.findMany({
       where: { userId: user.id },
-      include: { items: { include: { product: true } } },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
     return NextResponse.json(invoices);
   } catch (error) {
@@ -31,38 +36,21 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { clientName, clientEmail, dueDate, items } = await request.json();
-    const invoice = await prisma.invoice.create({
-      data: {
-        number: `INV-${Date.now()}`,
-        clientName,
-        clientEmail,
-        dueDate: new Date(dueDate),
-        status: "PENDING",
-        total: 0, // Calculate total based on items
-        userId: user.id,
-        items: {
-          create: items.map((item: any) => ({
-            quantity: item.quantity,
-            product: { connect: { id: item.productId } },
-          })),
-        },
-      },
-      include: { items: { include: { product: true } } },
-    });
+    const { clientName, clientEmail, dueDate, items, businessId } =
+      await request.json();
 
-    // Calculate and update total
-    const total = invoice.items.reduce(
-      (sum, item) => sum + item.quantity * item.product.price,
-      0
-    );
-    await prisma.invoice.update({
-      where: { id: invoice.id },
-      data: { total },
+    const invoice = await createInvoice({
+      clientName,
+      clientEmail,
+      dueDate,
+      items,
+      businessId,
+      user,
     });
 
     return NextResponse.json(invoice);
   } catch (error) {
+    console.error("Create invoice error:", error);
     return NextResponse.json(
       { error: "Failed to create invoice" },
       { status: 500 }

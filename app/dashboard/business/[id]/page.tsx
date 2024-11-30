@@ -1,3 +1,4 @@
+// app/dashboard/business/[id]/page.tsx
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -22,6 +23,10 @@ export default function EditBusiness() {
   const [address, setAddress] = useState("");
   const [website, setWebsite] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [ifscCode, setIfscCode] = useState("");
+  const [accountNo, setAccountNo] = useState("");
+  const [upiId, setUpiId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -32,6 +37,10 @@ export default function EditBusiness() {
       setAddress(business.address || "");
       setWebsite(business.website || "");
       setLogoUrl(business.logoUrl || "");
+      setBankName(business.bankName || "");
+      setIfscCode(business.ifscCode || "");
+      setAccountNo(business.accountNo || "");
+      setUpiId(business.upiId || "");
     }
   }, [business]);
 
@@ -47,6 +56,10 @@ export default function EditBusiness() {
         address,
         website,
         logoUrl,
+        bankName,
+        ifscCode,
+        accountNo,
+        upiId,
       });
       toast.success("Business updated successfully");
       router.push("/dashboard/business");
@@ -115,6 +128,44 @@ export default function EditBusiness() {
             onChange={(e) => setLogoUrl(e.target.value)}
             placeholder="https://example.com/logo.png"
           />
+        </div>
+        <div className="border-t pt-4 mt-4">
+          <h2 className="text-lg font-semibold mb-4">Payment Details</h2>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="bankName">Bank Name</Label>
+              <Input
+                id="bankName"
+                value={bankName}
+                onChange={(e) => setBankName(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="ifscCode">IFSC Code</Label>
+              <Input
+                id="ifscCode"
+                value={ifscCode}
+                onChange={(e) => setIfscCode(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="accountNo">Account Number</Label>
+              <Input
+                id="accountNo"
+                value={accountNo}
+                onChange={(e) => setAccountNo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="upiId">UPI ID</Label>
+              <Input
+                id="upiId"
+                value={upiId}
+                onChange={(e) => setUpiId(e.target.value)}
+                placeholder="example@upi"
+              />
+            </div>
+          </div>
         </div>
         <div className="flex gap-4">
           <Button

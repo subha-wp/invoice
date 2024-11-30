@@ -6,8 +6,9 @@ import { validateRequest } from "@/lib/auth";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,8 +16,11 @@ export async function GET(
 
   try {
     const invoice = await prisma.invoice.findUnique({
-      where: { id: params.id },
-      include: { items: { include: { product: true } } },
+      where: { id: id },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
 
     if (!invoice || invoice.userId !== user.id) {
@@ -34,23 +38,37 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const { clientName, clientEmail, dueDate, status, items } =
+    const { clientName, clientEmail, dueDate, status, items, businessId } =
       await request.json();
+
+    const business = await prisma.business.findFirst({
+      where: { id: businessId, userId: user.id },
+    });
+
+    if (!business) {
+      return NextResponse.json(
+        { error: "Business not found or doesn't belong to the user" },
+        { status: 404 }
+      );
+    }
+
     const updatedInvoice = await prisma.invoice.update({
-      where: { id: params.id, userId: user.id },
+      where: { id: id, userId: user.id },
       data: {
         clientName,
         clientEmail,
         dueDate: new Date(dueDate),
         status,
+        businessId,
         items: {
           deleteMany: {},
           create: items.map((item: any) => ({
@@ -59,7 +77,10 @@ export async function PUT(
           })),
         },
       },
-      include: { items: { include: { product: true } } },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
 
     // Recalculate total
@@ -83,8 +104,9 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const { user } = await validateRequest();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -92,7 +114,7 @@ export async function DELETE(
 
   try {
     await prisma.invoice.deleteMany({
-      where: { id: params.id, userId: user.id },
+      where: { id: id, userId: user.id },
     });
     return NextResponse.json({ message: "Invoice deleted successfully" });
   } catch (error) {
