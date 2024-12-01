@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable jsx-a11y/alt-text */
+//@ts-nocheck
 import React from "react";
 import {
   Document,
@@ -8,7 +11,7 @@ import {
   Image,
   Font,
 } from "@react-pdf/renderer";
-import { Invoice } from "@/types";
+import { Estimate } from "@/types";
 
 Font.register({
   family: "Roboto",
@@ -146,94 +149,48 @@ const styles = StyleSheet.create({
     fontSize: 10,
     alignSelf: "flex-end",
   },
-  cardTitle: {
-    fontSize: 24,
-    fontWeight: 700,
-    color: "#1a237e",
-    marginBottom: 5,
-  },
-  invoiceNumber: {
-    fontSize: 16,
-    fontWeight: 500,
-    color: "#3f51b5",
-    marginBottom: 5,
-  },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: 700,
-    marginBottom: 5,
-    color: "#1a237e",
-  },
-  tableHeader: {
-    backgroundColor: "#f5f5f5",
-  },
-  subtotalRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 10,
-  },
-  subtotalText: {
-    fontSize: 12,
-    fontWeight: 500,
-    marginRight: 10,
-  },
-  totalRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 5,
-    borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
-    paddingTop: 5,
-  },
-  totalText: {
-    fontSize: 14,
-    fontWeight: 700,
-    marginRight: 10,
-  },
 });
 
-export function InvoicePDF({ invoice }: { invoice: Invoice }) {
+export function EstimatePDF({ estimate }: { estimate: Estimate }) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View style={styles.leftHeader}>
-            {invoice.business?.logoUrl && (
-              <Image style={styles.logo} src={invoice.business.logoUrl} />
+            {estimate.business?.logoUrl && (
+              <Image style={styles.logo} src={estimate.business.logoUrl} />
             )}
-            <Text style={styles.text}>{invoice.business?.name}</Text>
-            <Text style={styles.text}>{invoice.business?.address}</Text>
-            <Text style={styles.text}>{invoice.business?.email}</Text>
-            <Text style={styles.text}>{invoice.business?.phone}</Text>
+            <Text style={styles.text}>{estimate.business?.name}</Text>
+            <Text style={styles.text}>{estimate.business?.address}</Text>
+            <Text style={styles.text}>{estimate.business?.email}</Text>
+            <Text style={styles.text}>{estimate.business?.phone}</Text>
           </View>
           <View style={styles.rightHeader}>
-            <Text style={styles.cardTitle}>Invoice</Text>
-            <Text style={styles.invoiceNumber}>#{invoice.number}</Text>
+            <Text style={styles.title}>Estimate</Text>
+            <Text style={styles.subtitle}>#{estimate.number}</Text>
             <Text style={styles.text}>
               Date: {new Date().toLocaleDateString()}
             </Text>
             <Text style={styles.text}>
-              Due Date: {new Date(invoice.dueDate).toLocaleDateString()}
+              Expiry Date: {new Date(estimate.expiryDate).toLocaleDateString()}
             </Text>
           </View>
         </View>
 
         <View style={styles.clientInfo}>
-          <Text style={styles.sectionTitle}>Bill To</Text>
-          <Text style={[styles.text, { fontWeight: 500 }]}>
-            {invoice.clientName}
-          </Text>
-          <Text style={styles.text}>{invoice.clientEmail}</Text>
-          {invoice.clientAddress && (
-            <Text style={styles.text}>{invoice.clientAddress}</Text>
+          <Text style={styles.subtitle}>Estimate For</Text>
+          <Text style={styles.text}>{estimate.clientName}</Text>
+          <Text style={styles.text}>{estimate.clientEmail}</Text>
+          {estimate.clientAddress && (
+            <Text style={styles.text}>{estimate.clientAddress}</Text>
           )}
-          {invoice.additionalAddress && (
-            <Text style={styles.text}>{invoice.additionalAddress}</Text>
+          {estimate.additionalAddress && (
+            <Text style={styles.text}>{estimate.additionalAddress}</Text>
           )}
         </View>
 
         <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
+          <View style={styles.tableRow}>
             <View style={styles.tableColHeader}>
               <Text style={[styles.tableCell, { fontWeight: 700 }]}>Item</Text>
             </View>
@@ -250,7 +207,7 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
             </View>
           </View>
 
-          {invoice.items?.map((item) => (
+          {estimate.items?.map((item) => (
             <View style={styles.tableRow} key={item.id}>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>{item.product.name}</Text>
@@ -260,60 +217,19 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  {"\u20B9"}
-                  {item.product.price.toFixed(2)}
+                  ₹{item.product.price.toFixed(2)}
                 </Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  {"\u20B9"}
-                  {(item.quantity * item.product.price).toFixed(2)}
+                  ₹{(item.quantity * item.product.price).toFixed(2)}
                 </Text>
               </View>
             </View>
           ))}
         </View>
 
-        <View style={styles.subtotalRow}>
-          <Text style={styles.subtotalText}>Subtotal:</Text>
-          <Text style={styles.subtotalText}>
-            {"\u20B9"}
-            {invoice.total.toFixed(2)}
-          </Text>
-        </View>
-        <View style={styles.subtotalRow}>
-          <Text style={styles.subtotalText}>Tax:</Text>
-          <Text style={styles.subtotalText}>{"\u20B9"}0.00</Text>
-        </View>
-        <View style={styles.totalRow}>
-          <Text style={styles.totalText}>Total:</Text>
-          <Text style={styles.totalText}>
-            {"\u20B9"}
-            {invoice.total.toFixed(2)}
-          </Text>
-        </View>
-
-        {invoice.business?.bankName && (
-          <View style={styles.paymentInfo}>
-            <Text style={styles.sectionTitle}>Payment Details</Text>
-            <View style={styles.bankDetails}>
-              <Text style={styles.text}>
-                Bank Name: {invoice.business.bankName}
-              </Text>
-              <Text style={styles.text}>
-                Account No: {invoice.business.accountNo}
-              </Text>
-              <Text style={styles.text}>
-                IFSC Code: {invoice.business.ifscCode}
-              </Text>
-              {invoice.business.upiId && (
-                <Text style={styles.text}>
-                  UPI ID: {invoice.business.upiId}
-                </Text>
-              )}
-            </View>
-          </View>
-        )}
+        <Text style={styles.total}>Total: ₹{estimate.total.toFixed(2)}</Text>
 
         <View style={styles.signature}>
           <Text>Authorized Signature</Text>

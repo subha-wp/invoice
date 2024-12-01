@@ -13,8 +13,8 @@ export async function createInvoice({
 }: {
   clientName: string;
   clientEmail: string;
-  clientAddress?: string;
-  additionalAddress?: string;
+  clientAddress?: string | null;
+  additionalAddress?: string | null;
   dueDate: string;
   items: Array<{ productId: string; quantity: number }>;
   businessId: string;
@@ -25,8 +25,8 @@ export async function createInvoice({
       number: `INV-${Date.now()}`,
       clientName,
       clientEmail,
-      clientAddress,
-      additionalAddress,
+      clientAddress: clientAddress || null,
+      additionalAddress: additionalAddress || null,
       dueDate: new Date(dueDate),
       status: "PENDING",
       total: 0,

@@ -47,25 +47,24 @@ export async function PUT(
   }
 
   try {
-    const { clientName, clientEmail, dueDate, status, items, businessId } =
-      await request.json();
-
-    const business = await prisma.business.findFirst({
-      where: { id: businessId, userId: user.id },
-    });
-
-    if (!business) {
-      return NextResponse.json(
-        { error: "Business not found or doesn't belong to the user" },
-        { status: 404 }
-      );
-    }
+    const {
+      clientName,
+      clientEmail,
+      clientAddress,
+      additionalAddress,
+      dueDate,
+      status,
+      items,
+      businessId,
+    } = await request.json();
 
     const updatedInvoice = await prisma.invoice.update({
       where: { id: id, userId: user.id },
       data: {
         clientName,
         clientEmail,
+        clientAddress: clientAddress || null,
+        additionalAddress: additionalAddress || null,
         dueDate: new Date(dueDate),
         status,
         businessId,
@@ -88,38 +87,20 @@ export async function PUT(
       (sum, item) => sum + item.quantity * item.product.price,
       0
     );
-    await prisma.invoice.update({
+
+    const finalInvoice = await prisma.invoice.update({
       where: { id: updatedInvoice.id },
       data: { total },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
 
-    return NextResponse.json(updatedInvoice);
+    return NextResponse.json(finalInvoice);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to update invoice" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
-  const { user } = await validateRequest();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  try {
-    await prisma.invoice.deleteMany({
-      where: { id: id, userId: user.id },
-    });
-    return NextResponse.json({ message: "Invoice deleted successfully" });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to delete invoice" },
       { status: 500 }
     );
   }

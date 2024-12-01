@@ -17,7 +17,10 @@ export async function GET(
   try {
     const estimate = await prisma.estimate.findUnique({
       where: { id: id },
-      include: { items: { include: { product: true } }, business: true },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
 
     if (!estimate || estimate.userId !== user.id) {
@@ -47,15 +50,27 @@ export async function PUT(
   }
 
   try {
-    const { clientName, clientEmail, expiryDate, status, items } =
-      await request.json();
+    const {
+      clientName,
+      clientEmail,
+      clientAddress,
+      additionalAddress,
+      expiryDate,
+      status,
+      items,
+      businessId,
+    } = await request.json();
+
     const updatedEstimate = await prisma.estimate.update({
       where: { id: id, userId: user.id },
       data: {
         clientName,
         clientEmail,
+        clientAddress: clientAddress || null,
+        additionalAddress: additionalAddress || null,
         expiryDate: new Date(expiryDate),
         status,
+        businessId,
         items: {
           deleteMany: {},
           create: items.map((item: any) => ({
@@ -64,7 +79,10 @@ export async function PUT(
           })),
         },
       },
-      include: { items: { include: { product: true } } },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
 
     // Recalculate total
@@ -72,38 +90,20 @@ export async function PUT(
       (sum, item) => sum + item.quantity * item.product.price,
       0
     );
-    await prisma.estimate.update({
+
+    const finalEstimate = await prisma.estimate.update({
       where: { id: updatedEstimate.id },
       data: { total },
+      include: {
+        items: { include: { product: true } },
+        business: true,
+      },
     });
 
-    return NextResponse.json(updatedEstimate);
+    return NextResponse.json(finalEstimate);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to update estimate" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params;
-  const { user } = await validateRequest();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  try {
-    await prisma.estimate.deleteMany({
-      where: { id: id, userId: user.id },
-    });
-    return NextResponse.json({ message: "Estimate deleted successfully" });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to delete estimate" },
       { status: 500 }
     );
   }
