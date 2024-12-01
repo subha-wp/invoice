@@ -66,20 +66,22 @@ model Product {
 }
 
 model Invoice {
-  id          String    @id @default(cuid())
-  number      String    @unique
-  clientName  String
-  clientEmail String
-  dueDate     DateTime
-  status      String
-  total       Float
-  userId      String
-  businessId  String
-  user        User      @relation(fields: [userId], references: [id])
-  business    Business  @relation(fields: [businessId], references: [id])
-  items       InvoiceItem[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  number           String    @unique
+  clientName       String
+  clientEmail      String
+  clientAddress    String?
+  additionalAddress String?
+  dueDate          DateTime
+  status           String
+  total            Float
+  userId           String
+  businessId       String
+  user             User      @relation(fields: [userId], references: [id])
+  business         Business  @relation(fields: [businessId], references: [id])
+  items            InvoiceItem[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model InvoiceItem {
@@ -92,20 +94,22 @@ model InvoiceItem {
 }
 
 model Estimate {
-  id          String    @id @default(cuid())
-  number      String    @unique
-  clientName  String
-  clientEmail String
-  expiryDate  DateTime
-  status      String
-  total       Float
-  userId      String
-  businessId  String
-  user        User      @relation(fields: [userId], references: [id])
-  business    Business  @relation(fields: [businessId], references: [id])
-  items       EstimateItem[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  number           String    @unique
+  clientName       String
+  clientEmail      String
+  clientAddress    String?
+  additionalAddress String?
+  expiryDate       DateTime
+  status           String
+  total            Float
+  userId           String
+  businessId       String
+  user             User      @relation(fields: [userId], references: [id])
+  business         Business  @relation(fields: [businessId], references: [id])
+  items            EstimateItem[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model EstimateItem {

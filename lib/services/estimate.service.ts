@@ -4,6 +4,8 @@ import { User } from "@/types";
 export async function createEstimate({
   clientName,
   clientEmail,
+  clientAddress,
+  additionalAddress,
   expiryDate,
   items,
   businessId,
@@ -11,6 +13,8 @@ export async function createEstimate({
 }: {
   clientName: string;
   clientEmail: string;
+  clientAddress?: string;
+  additionalAddress?: string;
   expiryDate: string;
   items: Array<{ productId: string; quantity: number }>;
   businessId: string;
@@ -21,6 +25,8 @@ export async function createEstimate({
       number: `EST-${Date.now()}`,
       clientName,
       clientEmail,
+      clientAddress,
+      additionalAddress,
       expiryDate: new Date(expiryDate),
       status: "PENDING",
       total: 0,

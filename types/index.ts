@@ -34,6 +34,8 @@ export interface Invoice {
   number: string;
   clientName: string;
   clientEmail: string;
+  clientAddress?: string;
+  additionalAddress?: string;
   dueDate: Date;
   status: string;
   total: number;
@@ -58,6 +60,8 @@ export interface Estimate {
   number: string;
   clientName: string;
   clientEmail: string;
+  clientAddress?: string;
+  additionalAddress?: string;
   expiryDate: Date;
   status: string;
   total: number;

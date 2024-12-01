@@ -46,6 +46,7 @@ export async function getProducts(): Promise<Product[]> {
   if (!response.ok) throw new Error("Failed to fetch products");
   return response.json();
 }
+
 export async function getProduct(id: string): Promise<Product> {
   const response = await fetch(`${BASE_URL}/api/products/${id}`);
   if (!response.ok) throw new Error("Failed to fetch product");
@@ -83,6 +84,7 @@ export async function deleteProduct(id: string): Promise<void> {
   });
   if (!response.ok) throw new Error("Failed to delete product");
 }
+
 // Invoice Services
 export async function getInvoices(): Promise<Invoice[]> {
   const response = await fetch(`${BASE_URL}/api/invoices`);
@@ -108,6 +110,19 @@ export async function createInvoice(
   return response.json();
 }
 
+export async function updateInvoice(
+  id: string,
+  data: Partial<Invoice>
+): Promise<Invoice> {
+  const response = await fetch(`${BASE_URL}/api/invoices/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Failed to update invoice");
+  return response.json();
+}
+
 // Estimate Services
 export async function getEstimates(): Promise<Estimate[]> {
   const response = await fetch(`${BASE_URL}/api/estimates`);
@@ -130,5 +145,18 @@ export async function createEstimate(
     body: JSON.stringify(data),
   });
   if (!response.ok) throw new Error("Failed to create estimate");
+  return response.json();
+}
+
+export async function updateEstimate(
+  id: string,
+  data: Partial<Estimate>
+): Promise<Estimate> {
+  const response = await fetch(`${BASE_URL}/api/estimates/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Failed to update estimate");
   return response.json();
 }

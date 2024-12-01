@@ -1,27 +1,56 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-"use client";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-import { Product } from "@/types";
+import { Product, Business, Invoice, Estimate } from "@/types";
 import { useBusiness } from "@/lib/hooks/useBusiness";
 import { toast } from "sonner";
-import { ItemList } from "@/components/forms/ItemList";
-import { BusinessSelect } from "@/components/forms/BusinessSelect";
+import { ItemList } from "./ItemList";
+import { BusinessSelect } from "./BusinessSelect";
 
-export default function CreateInvoice() {
-  const [clientName, setClientName] = useState("");
-  const [clientEmail, setClientEmail] = useState("");
-  const [clientAddress, setClientAddress] = useState("");
-  const [additionalAddress, setAdditionalAddress] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [businessId, setBusinessId] = useState("");
-  const [items, setItems] = useState([{ productId: "", quantity: 1 }]);
+interface DocumentFormProps {
+  type: "invoice" | "estimate";
+  initialData?: Invoice | Estimate;
+  onSubmit: (data: any) => Promise<void>;
+}
+
+export function DocumentForm({
+  type,
+  initialData,
+  onSubmit,
+}: DocumentFormProps) {
+  const [clientName, setClientName] = useState(initialData?.clientName || "");
+  const [clientEmail, setClientEmail] = useState(
+    initialData?.clientEmail || ""
+  );
+  const [clientAddress, setClientAddress] = useState(
+    initialData?.clientAddress || ""
+  );
+  const [additionalAddress, setAdditionalAddress] = useState(
+    initialData?.additionalAddress || ""
+  );
+  const [date, setDate] = useState(
+    initialData
+      ? new Date(
+          type === "invoice"
+            ? (initialData as Invoice).dueDate
+            : (initialData as Estimate).expiryDate
+        )
+          .toISOString()
+          .split("T")[0]
+      : ""
+  );
+  const [businessId, setBusinessId] = useState(initialData?.businessId || "");
+  const [items, setItems] = useState(
+    initialData?.items?.map((item) => ({
+      productId: item.product.id,
+      quantity: item.quantity,
+    })) || [{ productId: "", quantity: 1 }]
+  );
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,27 +85,30 @@ export default function CreateInvoice() {
 
     setIsLoading(true);
     setError(null);
+
     try {
-      const response = await fetch("/api/invoices", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          clientName,
-          clientEmail,
-          clientAddress,
-          additionalAddress,
-          dueDate,
-          items,
-          businessId,
-        }),
+      await onSubmit({
+        clientName,
+        clientEmail,
+        clientAddress,
+        additionalAddress,
+        [type === "invoice" ? "dueDate" : "expiryDate"]: date,
+        items,
+        businessId,
       });
-      if (!response.ok) throw new Error("Failed to create invoice");
-      toast.success("Invoice created successfully");
-      router.push("/dashboard/invoices");
+
+      toast.success(
+        `${type.charAt(0).toUpperCase() + type.slice(1)} ${
+          initialData ? "updated" : "created"
+        } successfully`
+      );
+      router.push(`/dashboard/${type}s`);
     } catch (err) {
-      toast.error("Failed to create invoice. Please try again.");
+      toast.error(
+        `Failed to ${
+          initialData ? "update" : "create"
+        } ${type}. Please try again.`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -102,7 +134,10 @@ export default function CreateInvoice() {
 
   return (
     <div className="container mx-auto px-4 pb-20">
-      <h1 className="text-2xl font-bold my-4">Create New Invoice</h1>
+      <h1 className="text-2xl font-bold my-4">
+        {initialData ? "Edit" : "Create New"}{" "}
+        {type.charAt(0).toUpperCase() + type.slice(1)}
+      </h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -151,12 +186,14 @@ export default function CreateInvoice() {
           />
         </div>
         <div>
-          <Label htmlFor="dueDate">Due Date</Label>
+          <Label htmlFor="date">
+            {type === "invoice" ? "Due Date" : "Expiry Date"}
+          </Label>
           <Input
-            id="dueDate"
+            id="date"
             type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             required
           />
         </div>
@@ -171,7 +208,13 @@ export default function CreateInvoice() {
           />
         </div>
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Creating..." : "Create Invoice"}
+          {isLoading
+            ? initialData
+              ? "Updating..."
+              : "Creating..."
+            : initialData
+            ? "Update"
+            : "Create"}
         </Button>
       </form>
     </div>

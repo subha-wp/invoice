@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getInvoice } from "@/lib/services/api";
 import { Invoice } from "@/types";
 import { toast } from "sonner";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Download, PenIcon } from "lucide-react";
 import Link from "next/link";
 import { CopyToClipboardButton } from "@/components/copy-to-clipboard-button";
 
@@ -63,9 +63,19 @@ export default function InvoiceDetail() {
       <Card className="mb-4">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl">Invoice #{invoice.number}</CardTitle>
-          <CopyToClipboardButton
-            text={`${window.location.origin}/view/invoices/${id}`}
-          />
+          <div>
+            <CopyToClipboardButton
+              text={`${window.location.origin}/view/invoices/${id}`}
+            />
+            <Link
+              href={`${window.location.origin}/dashboard/invoices/${id}/edit`}
+            >
+              <Button variant="outline" size="sm" className="mt-1 pr-5">
+                <PenIcon className="mr-2 h-4 w-4" />
+                Edit
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

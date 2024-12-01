@@ -1,14 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Product } from "@/types";
 import { Trash2 } from "lucide-react";
+import { ProductSearch } from "./ProductSearch";
 
 interface ItemListProps {
   items: Array<{ productId: string; quantity: number }>;
@@ -25,25 +19,28 @@ export function ItemList({
   onRemoveItem,
   onUpdateItem,
 }: ItemListProps) {
+  const getProductById = (productId: string) => {
+    return products.find((p) => p.id === productId);
+  };
+
   return (
     <div className="space-y-4">
       {items.map((item, index) => (
-        <div key={index} className="flex gap-2 items-center">
-          <Select
-            value={item.productId}
-            onValueChange={(value) => onUpdateItem(index, "productId", value)}
-          >
-            <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Select product" />
-            </SelectTrigger>
-            <SelectContent>
-              {products.map((product) => (
-                <SelectItem key={product.id} value={product.id}>
-                  {product.name} - ₹{product.price.toFixed(2)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div key={index} className="flex gap-2 items-start">
+          <div className="flex-1">
+            <ProductSearch
+              products={products}
+              onSelect={(product) =>
+                onUpdateItem(index, "productId", product.id)
+              }
+            />
+            {item.productId && (
+              <div className="mt-1 text-sm text-muted-foreground">
+                Selected: {getProductById(item.productId)?.name} - ₹
+                {getProductById(item.productId)?.price.toFixed(2)}
+              </div>
+            )}
+          </div>
           <Input
             type="number"
             value={item.quantity}

@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+
 import { Product } from "@/types";
 import { useBusiness } from "@/lib/hooks/useBusiness";
 import { toast } from "sonner";
@@ -15,6 +17,8 @@ import { BusinessSelect } from "@/components/forms/BusinessSelect";
 export default function CreateEstimate() {
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
+  const [clientAddress, setClientAddress] = useState("");
+  const [additionalAddress, setAdditionalAddress] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [businessId, setBusinessId] = useState("");
   const [items, setItems] = useState([{ productId: "", quantity: 1 }]);
@@ -61,6 +65,8 @@ export default function CreateEstimate() {
         body: JSON.stringify({
           clientName,
           clientEmail,
+          clientAddress,
+          additionalAddress,
           expiryDate,
           items,
           businessId,
@@ -124,6 +130,24 @@ export default function CreateEstimate() {
             value={clientEmail}
             onChange={(e) => setClientEmail(e.target.value)}
             required
+          />
+        </div>
+        <div>
+          <Label htmlFor="clientAddress">Client Address</Label>
+          <Textarea
+            id="clientAddress"
+            value={clientAddress}
+            onChange={(e) => setClientAddress(e.target.value)}
+            placeholder="Enter client's primary address"
+          />
+        </div>
+        <div>
+          <Label htmlFor="additionalAddress">Additional Address</Label>
+          <Textarea
+            id="additionalAddress"
+            value={additionalAddress}
+            onChange={(e) => setAdditionalAddress(e.target.value)}
+            placeholder="Enter additional address details (optional)"
           />
         </div>
         <div>

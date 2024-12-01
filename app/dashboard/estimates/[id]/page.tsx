@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getEstimate } from "@/lib/services/api";
 import { Estimate } from "@/types";
 import { toast } from "sonner";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Download, PenIcon } from "lucide-react";
 import Link from "next/link";
 import { CopyToClipboardButton } from "@/components/copy-to-clipboard-button";
 
@@ -65,9 +65,19 @@ export default function EstimateDetail() {
       <Card className="mb-4">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl">Estimate #{estimate.number}</CardTitle>
-          <CopyToClipboardButton
-            text={`${window.location.origin}/view/estimates/${id}`}
-          />
+          <div className="space-y-1">
+            <CopyToClipboardButton
+              text={`${window.location.origin}/view/estimates/${id}`}
+            />
+            <Link
+              href={`${window.location.origin}/dashboard/estimates/${id}/edit`}
+            >
+              <Button variant="outline" size="sm" className="mt-1 pr-5">
+                <PenIcon className="mr-2 h-4 w-4" />
+                Edit
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

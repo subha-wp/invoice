@@ -4,6 +4,8 @@ import { User } from "@/types";
 export async function createInvoice({
   clientName,
   clientEmail,
+  clientAddress,
+  additionalAddress,
   dueDate,
   items,
   businessId,
@@ -11,6 +13,8 @@ export async function createInvoice({
 }: {
   clientName: string;
   clientEmail: string;
+  clientAddress?: string;
+  additionalAddress?: string;
   dueDate: string;
   items: Array<{ productId: string; quantity: number }>;
   businessId: string;
@@ -21,6 +25,8 @@ export async function createInvoice({
       number: `INV-${Date.now()}`,
       clientName,
       clientEmail,
+      clientAddress,
+      additionalAddress,
       dueDate: new Date(dueDate),
       status: "PENDING",
       total: 0,
