@@ -8,6 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Drawer,
   DrawerClose,
   DrawerContent,
@@ -21,6 +28,20 @@ import {
 import { getProduct, updateProduct, deleteProduct } from "@/lib/services/api";
 import { toast } from "sonner";
 
+const units = [
+  "piece",
+  "kg",
+  "g",
+  "mg",
+  "l",
+  "ml",
+  "m",
+  "cm",
+  "mm",
+  "Nos",
+  "Ft",
+];
+
 export default function EditProduct() {
   const { id } = useParams();
   const router = useRouter();
@@ -28,6 +49,8 @@ export default function EditProduct() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [unit, setUnit] = useState("piece");
+  const [taxPercent, setTaxPercent] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -39,6 +62,8 @@ export default function EditProduct() {
         setName(product.name);
         setDescription(product.description || "");
         setPrice(product.price.toString());
+        setUnit(product.unit);
+        setTaxPercent(product.taxPercent.toString());
       } catch (error) {
         toast.error("Failed to fetch product details");
       }
@@ -56,6 +81,8 @@ export default function EditProduct() {
         name,
         description,
         price: parseFloat(price),
+        unit,
+        taxPercent: parseFloat(taxPercent),
       });
       toast.success("Product updated successfully");
       router.push("/dashboard/products");
@@ -109,6 +136,34 @@ export default function EditProduct() {
             step="0.01"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="unit">Unit</Label>
+          <Select value={unit} onValueChange={setUnit}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select unit" />
+            </SelectTrigger>
+            <SelectContent>
+              {units.map((unit) => (
+                <SelectItem key={unit} value={unit}>
+                  {unit}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="taxPercent">Tax Percentage (GST)</Label>
+          <Input
+            id="taxPercent"
+            type="number"
+            step="0.01"
+            min="0"
+            max="100"
+            value={taxPercent}
+            onChange={(e) => setTaxPercent(e.target.value)}
             required
           />
         </div>

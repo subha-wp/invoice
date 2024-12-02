@@ -1,4 +1,3 @@
-// app/api/products/[id]/route.ts
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
@@ -43,13 +42,15 @@ export async function PUT(
   }
 
   try {
-    const { name, description, price } = await request.json();
+    const { name, description, price, unit, taxPercent } = await request.json();
     const updatedProduct = await prisma.product.update({
       where: { id: id, userId: user.id },
       data: {
         name,
         description,
         price,
+        unit,
+        taxPercent,
       },
     });
     return NextResponse.json(updatedProduct);

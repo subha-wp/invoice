@@ -1,9 +1,6 @@
-// app/dashboard/products/page.tsx
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -35,6 +32,8 @@ export default function ProductsPage() {
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Price</TableHead>
+              <TableHead>Unit</TableHead>
+              <TableHead>Tax %</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -44,6 +43,8 @@ export default function ProductsPage() {
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.description}</TableCell>
                 <TableCell>₹{product.price.toFixed(2)}</TableCell>
+                <TableCell>{product.unit}</TableCell>
+                <TableCell>{product.taxPercent}%</TableCell>
                 <TableCell>
                   <Button asChild size="sm">
                     <Link href={`/dashboard/products/${product.id}`}>Edit</Link>

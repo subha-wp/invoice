@@ -59,6 +59,8 @@ model Product {
   name        String
   description String?
   price       Float
+  unit        String    @default("piece") // New field
+  taxPercent  Float     @default(0)       // New field
   userId      String
   user        User      @relation(fields: [userId], references: [id])
   invoiceItems InvoiceItem[]
