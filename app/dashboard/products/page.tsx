@@ -30,10 +30,8 @@ export default function ProductsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Unit</TableHead>
-              <TableHead>Tax %</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -41,10 +39,8 @@ export default function ProductsPage() {
             {products.map((product) => (
               <TableRow key={product.id}>
                 <TableCell>{product.name}</TableCell>
-                <TableCell>{product.description}</TableCell>
                 <TableCell>₹{product.price.toFixed(2)}</TableCell>
                 <TableCell>{product.unit}</TableCell>
-                <TableCell>{product.taxPercent}%</TableCell>
                 <TableCell>
                   <Button asChild size="sm">
                     <Link href={`/dashboard/products/${product.id}`}>Edit</Link>

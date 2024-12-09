@@ -48,11 +48,12 @@ export async function createInvoice({
     },
   });
 
-  // Calculate total
-  const total = invoice.items.reduce(
-    (sum, item) => sum + item.quantity * item.product.price,
-    0
-  );
+  // Calculate total including tax
+  const total = invoice.items.reduce((sum, item) => {
+    const subtotal = item.quantity * item.product.price;
+    const tax = (subtotal * item.product.taxPercent) / 100;
+    return sum + subtotal + tax;
+  }, 0);
 
   // Update invoice with calculated total
   return prisma.invoice.update({

@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Download, PenIcon } from "lucide-react";
 import Link from "next/link";
 import { CopyToClipboardButton } from "@/components/copy-to-clipboard-button";
+import { ItemTable } from "@/components/document/ItemTable";
 
 export default function EstimateDetail() {
   const { id } = useParams();
@@ -100,45 +101,7 @@ export default function EstimateDetail() {
             </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-2">Items</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2">Item</th>
-                    <th className="text-right py-2">Qty</th>
-                    <th className="text-right py-2">Price</th>
-                    <th className="text-right py-2">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {estimate.items.map((item) => (
-                    <tr key={item.id} className="border-b">
-                      <td className="py-2">{item.product.name}</td>
-                      <td className="text-right py-2">{item.quantity}</td>
-                      <td className="text-right py-2">
-                        ₹{item.product.price.toFixed(2)}
-                      </td>
-                      <td className="text-right py-2">
-                        ₹{(item.quantity * item.product.price).toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colSpan={3} className="text-right font-semibold py-2">
-                      Total:
-                    </td>
-                    <td className="text-right font-semibold py-2">
-                      ₹{estimate.total.toFixed(2)}
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
+          <ItemTable items={estimate.items} />
 
           {estimate.business.bankName && (
             <div>

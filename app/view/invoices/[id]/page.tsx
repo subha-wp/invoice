@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { Invoice } from "@/types";
 import { InvoiceWeb } from "@/components/invoice-web";
 import { InvoicePDF } from "@/components/invoice-pdf";
+import { ItemTable } from "@/components/document/ItemTable";
 
 export default function PublicInvoiceView() {
   const { id } = useParams();
@@ -98,45 +99,7 @@ export default function PublicInvoiceView() {
             </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-2">Items</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2">Item</th>
-                    <th className="text-right py-2">Qty</th>
-                    <th className="text-right py-2">Price</th>
-                    <th className="text-right py-2">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {invoice.items?.map((item) => (
-                    <tr key={item.id} className="border-b">
-                      <td className="py-2">{item.product.name}</td>
-                      <td className="text-right py-2">{item.quantity}</td>
-                      <td className="text-right py-2">
-                        ₹{item.product.price.toFixed(2)}
-                      </td>
-                      <td className="text-right py-2">
-                        ₹{(item.quantity * item.product.price).toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colSpan={3} className="text-right font-semibold py-2">
-                      Total:
-                    </td>
-                    <td className="text-right font-semibold py-2">
-                      ₹{invoice.total.toFixed(2)}
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
+          <ItemTable items={invoice.items} />
 
           {invoice.business?.bankName && (
             <div>
