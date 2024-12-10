@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   tableColHeader: {
-    width: "25%",
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: "#e0e0e0",
@@ -105,13 +104,34 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   tableCol: {
-    width: "25%",
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: "#e0e0e0",
     borderLeftWidth: 0,
     borderTopWidth: 0,
     padding: 5,
+  },
+  itemCol: {
+    width: "52%",
+  },
+  quantityCol: {
+    width: "6%",
+  },
+  unitCol: {
+    width: "7%",
+  },
+  priceCol: {
+    width: "10%",
+  },
+  taxPercentCol: {
+    width: "7%",
+  },
+  taxAmountCol: {
+    width: "8%",
+  },
+  totalCol: {
+    width: "10%",
+    textAlign: "right",
   },
   tableCell: {
     fontSize: 10,
@@ -196,6 +216,25 @@ const styles = StyleSheet.create({
 });
 
 export function InvoicePDF({ invoice }: { invoice: Invoice }) {
+  const calculateSubtotal = (item) => {
+    return item.quantity * item.product.price;
+  };
+
+  const calculateTax = (item) => {
+    const subtotal = calculateSubtotal(item);
+    return (subtotal * item.product.taxPercent) / 100;
+  };
+
+  const calculateTotal = (item) => {
+    return calculateSubtotal(item) + calculateTax(item);
+  };
+
+  const subtotal =
+    invoice.items?.reduce((sum, item) => sum + calculateSubtotal(item), 0) || 0;
+  const taxTotal =
+    invoice.items?.reduce((sum, item) => sum + calculateTax(item), 0) || 0;
+  const total = subtotal + taxTotal;
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -237,63 +276,69 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
 
         <View style={styles.table}>
           <View style={[styles.tableRow, styles.tableHeader]}>
-            <View style={styles.tableColHeader}>
+            <View style={[styles.tableColHeader, styles.itemCol]}>
               <Text style={[styles.tableCell, { fontWeight: 700 }]}>Item</Text>
             </View>
-            <View style={styles.tableColHeader}>
-              <Text style={[styles.tableCell, { fontWeight: 700 }]}>
-                Quantity
-              </Text>
+            <View style={[styles.tableColHeader, styles.quantityCol]}>
+              <Text style={[styles.tableCell, { fontWeight: 700 }]}>Qty</Text>
             </View>
-            <View style={styles.tableColHeader}>
+            <View style={[styles.tableColHeader, styles.unitCol]}>
+              <Text style={[styles.tableCell, { fontWeight: 700 }]}>Unit</Text>
+            </View>
+            <View style={[styles.tableColHeader, styles.priceCol]}>
               <Text style={[styles.tableCell, { fontWeight: 700 }]}>Price</Text>
             </View>
-            <View style={styles.tableColHeader}>
+            <View style={[styles.tableColHeader, styles.taxPercentCol]}>
+              <Text style={[styles.tableCell, { fontWeight: 700 }]}>Tax %</Text>
+            </View>
+            <View style={[styles.tableColHeader, styles.taxAmountCol]}>
+              <Text style={[styles.tableCell, { fontWeight: 700 }]}>
+                Tax Amount
+              </Text>
+            </View>
+            <View style={[styles.tableColHeader, styles.totalCol]}>
               <Text style={[styles.tableCell, { fontWeight: 700 }]}>Total</Text>
             </View>
           </View>
 
           {invoice.items?.map((item) => (
             <View style={styles.tableRow} key={item.id}>
-              <View style={styles.tableCol}>
+              <View style={[styles.tableCol, styles.itemCol]}>
                 <Text style={styles.tableCell}>{item.product.name}</Text>
               </View>
-              <View style={styles.tableCol}>
+              <View style={[styles.tableCol, styles.quantityCol]}>
                 <Text style={styles.tableCell}>{item.quantity}</Text>
               </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>
-                  {"\u20B9"}
-                  {item.product.price.toFixed(2)}
-                </Text>
+              <View style={[styles.tableCol, styles.unitCol]}>
+                <Text style={styles.tableCell}>{item.product.unit}</Text>
               </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>
-                  {"\u20B9"}
-                  {(item.quantity * item.product.price).toFixed(2)}
-                </Text>
+              <View style={[styles.tableCol, styles.priceCol]}>
+                <Text style={styles.tableCell}>{item.product.price}</Text>
+              </View>
+              <View style={[styles.tableCol, styles.taxPercentCol]}>
+                <Text style={styles.tableCell}>{item.product.taxPercent}%</Text>
+              </View>
+              <View style={[styles.tableCol, styles.taxAmountCol]}>
+                <Text style={styles.tableCell}>{calculateTax(item)}</Text>
+              </View>
+              <View style={[styles.tableCol, styles.totalCol]}>
+                <Text style={styles.tableCell}>{calculateTotal(item)}</Text>
               </View>
             </View>
           ))}
         </View>
 
         <View style={styles.subtotalRow}>
-          <Text style={styles.subtotalText}>Subtotal:</Text>
-          <Text style={styles.subtotalText}>
-            {"\u20B9"}
-            {invoice.total.toFixed(2)}
-          </Text>
+          <Text style={styles.subtotalText}>Subtotal (Rs):</Text>
+          <Text style={styles.subtotalText}>{subtotal}</Text>
         </View>
         <View style={styles.subtotalRow}>
-          <Text style={styles.subtotalText}>Tax:</Text>
-          <Text style={styles.subtotalText}>{"\u20B9"}0.00</Text>
+          <Text style={styles.subtotalText}>Tax Total (Rs):</Text>
+          <Text style={styles.subtotalText}>{taxTotal}</Text>
         </View>
         <View style={styles.totalRow}>
-          <Text style={styles.totalText}>Total:</Text>
-          <Text style={styles.totalText}>
-            {"\u20B9"}
-            {invoice.total.toFixed(2)}
-          </Text>
+          <Text style={styles.totalText}>Total (Rs):</Text>
+          <Text style={styles.totalText}>{total}</Text>
         </View>
 
         {invoice.business?.bankName && (
