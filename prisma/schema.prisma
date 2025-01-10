@@ -74,6 +74,7 @@ model Invoice {
   clientEmail      String
   clientAddress    String?
   additionalAddress String?
+  date             DateTime  @default(now())
   dueDate          DateTime
   status           String
   total            Float
@@ -102,6 +103,7 @@ model Estimate {
   clientEmail      String
   clientAddress    String?
   additionalAddress String?
+  date             DateTime  @default(now())
   expiryDate       DateTime
   status           String
   total            Float

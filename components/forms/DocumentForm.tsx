@@ -34,6 +34,11 @@ export function DocumentForm({
     initialData?.additionalAddress || ""
   );
   const [date, setDate] = useState(
+    initialData?.date
+      ? new Date(initialData.date).toISOString().split("T")[0]
+      : new Date().toISOString().split("T")[0]
+  );
+  const [endDate, setEndDate] = useState(
     initialData
       ? new Date(
           type === "invoice"
@@ -92,9 +97,11 @@ export function DocumentForm({
         clientEmail,
         clientAddress,
         additionalAddress,
-        [type === "invoice" ? "dueDate" : "expiryDate"]: date,
+        date,
+        [type === "invoice" ? "dueDate" : "expiryDate"]: endDate,
         items,
         businessId,
+        status: initialData?.status || "PENDING",
       });
 
       toast.success(
@@ -186,14 +193,24 @@ export function DocumentForm({
           />
         </div>
         <div>
-          <Label htmlFor="date">
-            {type === "invoice" ? "Due Date" : "Expiry Date"}
-          </Label>
+          <Label htmlFor="date">Date</Label>
           <Input
             id="date"
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="endDate">
+            {type === "invoice" ? "Due Date" : "Expiry Date"}
+          </Label>
+          <Input
+            id="endDate"
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
             required
           />
         </div>

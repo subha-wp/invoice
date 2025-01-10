@@ -94,8 +94,20 @@ export default function EstimateDetail() {
               <p className="text-sm">Name: {estimate.clientName}</p>
               <p className="text-sm">Email: {estimate.clientEmail}</p>
               <p className="text-sm">
+                Date:{" "}
+                {new Date(estimate.date).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </p>
+              <p className="text-sm">
                 Expiry Date:{" "}
-                {new Date(estimate.expiryDate).toLocaleDateString()}
+                {new Date(estimate.expiryDate).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </p>
               <p className="text-sm">Status: {estimate.status}</p>
             </div>

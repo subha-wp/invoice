@@ -6,6 +6,7 @@ export async function createEstimate({
   clientEmail,
   clientAddress,
   additionalAddress,
+  date,
   expiryDate,
   items,
   businessId,
@@ -15,6 +16,7 @@ export async function createEstimate({
   clientEmail: string;
   clientAddress?: string | null;
   additionalAddress?: string | null;
+  date: string;
   expiryDate: string;
   items: Array<{ productId: string; quantity: number }>;
   businessId: string;
@@ -27,6 +29,7 @@ export async function createEstimate({
       clientEmail,
       clientAddress: clientAddress || null,
       additionalAddress: additionalAddress || null,
+      date: new Date(date),
       expiryDate: new Date(expiryDate),
       status: "PENDING",
       total: 0,

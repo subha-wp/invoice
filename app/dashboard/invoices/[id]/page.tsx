@@ -92,7 +92,20 @@ export default function InvoiceDetail() {
               <p className="text-sm">Name: {invoice.clientName}</p>
               <p className="text-sm">Email: {invoice.clientEmail}</p>
               <p className="text-sm">
-                Due Date: {new Date(invoice.dueDate).toLocaleDateString()}
+                Date:{" "}
+                {new Date(invoice.date).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </p>
+              <p className="text-sm">
+                Due Date:{" "}
+                {new Date(invoice.dueDate).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </p>
               <p className="text-sm">Status: {invoice.status}</p>
             </div>

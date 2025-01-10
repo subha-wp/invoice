@@ -6,6 +6,7 @@ export async function createInvoice({
   clientEmail,
   clientAddress,
   additionalAddress,
+  date,
   dueDate,
   items,
   businessId,
@@ -15,6 +16,7 @@ export async function createInvoice({
   clientEmail: string;
   clientAddress?: string | null;
   additionalAddress?: string | null;
+  date: string;
   dueDate: string;
   items: Array<{ productId: string; quantity: number }>;
   businessId: string;
@@ -27,6 +29,7 @@ export async function createInvoice({
       clientEmail,
       clientAddress: clientAddress || null,
       additionalAddress: additionalAddress || null,
+      date: new Date(date),
       dueDate: new Date(dueDate),
       status: "PENDING",
       total: 0,
