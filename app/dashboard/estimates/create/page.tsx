@@ -19,6 +19,7 @@ export default function CreateEstimate() {
   const [clientEmail, setClientEmail] = useState("");
   const [clientAddress, setClientAddress] = useState("");
   const [additionalAddress, setAdditionalAddress] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [expiryDate, setExpiryDate] = useState("");
   const [businessId, setBusinessId] = useState("");
   const [items, setItems] = useState([{ productId: "", quantity: 1 }]);
@@ -67,6 +68,7 @@ export default function CreateEstimate() {
           clientEmail,
           clientAddress,
           additionalAddress,
+          date,
           expiryDate,
           items,
           businessId,
@@ -148,6 +150,16 @@ export default function CreateEstimate() {
             value={additionalAddress}
             onChange={(e) => setAdditionalAddress(e.target.value)}
             placeholder="Enter additional address details (optional)"
+          />
+        </div>
+        <div>
+          <Label htmlFor="date">Date</Label>
+          <Input
+            id="date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
           />
         </div>
         <div>

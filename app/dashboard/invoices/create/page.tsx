@@ -19,6 +19,7 @@ export default function CreateInvoice() {
   const [clientEmail, setClientEmail] = useState("");
   const [clientAddress, setClientAddress] = useState("");
   const [additionalAddress, setAdditionalAddress] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [dueDate, setDueDate] = useState("");
   const [businessId, setBusinessId] = useState("");
   const [items, setItems] = useState([{ productId: "", quantity: 1 }]);
@@ -67,6 +68,7 @@ export default function CreateInvoice() {
           clientEmail,
           clientAddress,
           additionalAddress,
+          date,
           dueDate,
           items,
           businessId,
@@ -148,6 +150,16 @@ export default function CreateInvoice() {
             value={additionalAddress}
             onChange={(e) => setAdditionalAddress(e.target.value)}
             placeholder="Enter additional address details (optional)"
+          />
+        </div>
+        <div>
+          <Label htmlFor="date">Date</Label>
+          <Input
+            id="date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
           />
         </div>
         <div>
