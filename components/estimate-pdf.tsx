@@ -201,10 +201,20 @@ export function EstimatePDF({ estimate }: { estimate: Estimate }) {
             <Text style={styles.title}>Estimate</Text>
             <Text style={styles.subtitle}>#{estimate.number}</Text>
             <Text style={styles.text}>
-              Date: {new Date().toLocaleDateString()}
+              Date:{" "}
+              {new Date(estimate.date).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </Text>
             <Text style={styles.text}>
-              Expiry Date: {new Date(estimate.expiryDate).toLocaleDateString()}
+              Expiry Date:{" "}
+              {new Date(estimate.expiryDate).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </Text>
           </View>
         </View>

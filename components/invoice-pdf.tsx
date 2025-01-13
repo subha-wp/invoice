@@ -252,10 +252,20 @@ export function InvoicePDF({ invoice }: { invoice: Invoice }) {
             <Text style={styles.cardTitle}>Invoice</Text>
             <Text style={styles.invoiceNumber}>#{invoice.number}</Text>
             <Text style={styles.text}>
-              Date: {new Date().toLocaleDateString()}
+              Date:{" "}
+              {new Date(invoice.date).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </Text>
             <Text style={styles.text}>
-              Due Date: {new Date(invoice.dueDate).toLocaleDateString()}
+              Due Date:{" "}
+              {new Date(invoice.dueDate).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </Text>
           </View>
         </View>

@@ -16,7 +16,11 @@ export default function ProductsPage() {
   const { products, loading } = useProducts();
 
   if (loading) {
-    return <div>Loading products...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading products...
+      </div>
+    );
   }
 
   return (

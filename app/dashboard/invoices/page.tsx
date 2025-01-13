@@ -41,7 +41,20 @@ export default function InvoicesPage() {
             <CardContent>
               <p className="text-sm text-gray-600">{invoice.clientName}</p>
               <p className="text-sm text-gray-600">
-                Due: {new Date(invoice.dueDate).toLocaleDateString()}
+                Date:{" "}
+                {new Date(invoice.date).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </p>
+              <p className="text-sm text-gray-600">
+                Due:{" "}
+                {new Date(invoice.dueDate).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </p>
               <p className="font-bold mt-2">₹{invoice.total.toFixed(2)}</p>
             </CardContent>

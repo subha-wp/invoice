@@ -46,7 +46,20 @@ export default function EstimatesPage() {
                 Client: {estimate.clientName}
               </p>
               <p className="text-sm text-gray-600">
-                Expiry: {new Date(estimate.expiryDate).toLocaleDateString()}
+                Date:{" "}
+                {new Date(estimate.date).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </p>
+              <p className="text-sm text-gray-600">
+                Expiry:{" "}
+                {new Date(estimate.expiryDate).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
               </p>
               <p className="font-bold mt-2">
                 Total: ₹{estimate.total.toFixed(2)}
