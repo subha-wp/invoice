@@ -37,7 +37,7 @@ export function ItemList({
   return (
     <div className="space-y-4">
       {items.map((item, index) => (
-        <div key={index} className="space-y-2 border rounded-lg p-4">
+        <div key={index} className="space-y-2 border rounded-lg p-2">
           <div className="flex gap-2 items-start">
             <div className="flex-1">
               <ProductSearch
@@ -75,7 +75,7 @@ export function ItemList({
                   onUpdateItem(index, "quantity", parseInt(e.target.value))
                 }
                 min="1"
-                className="w-24"
+                className="w-14"
                 required
               />
               <Button

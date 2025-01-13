@@ -36,7 +36,7 @@ export function ProductSearch({ products, onSelect }: ProductSearchProps) {
         onClick={() => setOpen(true)}
         className="w-full justify-start text-left font-normal"
       >
-        <Search className="mr-2 h-4 w-4" />
+        <Search className=" h-2 w-2" />
         Search products...
       </Button>
       <DialogContent className="p-0 max-w-[90vw] md:max-w-[600px]">
@@ -45,7 +45,7 @@ export function ProductSearch({ products, onSelect }: ProductSearchProps) {
             className="flex items-center border-b px-3"
             cmdk-input-wrapper=""
           >
-            <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+            <Search className=" h-4 w-4 shrink-0 opacity-50" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
