@@ -36,12 +36,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { clientName, clientEmail, expiryDate, items, businessId } =
+    const { clientName, clientEmail, date, expiryDate, items, businessId } =
       await request.json();
 
     const estimate = await createEstimate({
       clientName,
       clientEmail,
+      date,
       expiryDate,
       items,
       businessId,

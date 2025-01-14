@@ -36,12 +36,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { clientName, clientEmail, dueDate, items, businessId } =
+    const { clientName, clientEmail, date, dueDate, items, businessId } =
       await request.json();
 
     const invoice = await createInvoice({
       clientName,
       clientEmail,
+      date,
       dueDate,
       items,
       businessId,
